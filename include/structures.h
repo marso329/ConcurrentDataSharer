@@ -11,10 +11,10 @@
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
-
-
 #include <sstream>
 
+
+typedef void (* CallbackSig)();
 
 class QueueElementBase {
 public:
@@ -76,16 +76,43 @@ private:
 protected:
 };
 
+class QueueElementCallback: public QueueElementBase {
+public:
+	QueueElementCallback(std::string const& name,CallbackSig func){
+_name=name;
+	callback=func;
+	}
+	CallbackSig getCallback(){
+		return callback;
+	}
+	~QueueElementCallback(){};
+private:
+	CallbackSig callback;
+protected:
+};
+
 class DataBaseElement {
 public:
 	DataBaseElement(std::string const&, std::string const&);
 	DataBaseElement(QueueElementSet*);
 	~DataBaseElement();
 	std::string getData();
+	void setData(std::string const& data){
+		_data=data;
+	}
+	void setCallback(CallbackSig func){
+		callback=func;
+	}
+	void runCallback(){
+		if(callback!=NULL){
+			callback();
+		}
+	}
 protected:
 private:
 	std::string _name;
 	std::string _data;
+	CallbackSig callback;
 
 };
 
@@ -98,6 +125,9 @@ public:
 	}
 	std::vector<std::string> getIPV6(){
 		return IPV6Adresses;
+	}
+	std::string getName(){
+		return _name;
 	}
 	~clientData(){};
 protected:

@@ -39,11 +39,11 @@ void QueueElementGet::setData(std::string const& data) {
 
 DataBaseElement::DataBaseElement(std::string const& name,
 		std::string const& data) :
-		_name(name), _data(data) {
+		_name(name), _data(data),callback(NULL) {
 
 }
 DataBaseElement::DataBaseElement(QueueElementSet* element) :
-		_name(element->getName()), _data(element->getData()) {
+		_name(element->getName()), _data(element->getData()),callback(NULL) {
 
 }
 

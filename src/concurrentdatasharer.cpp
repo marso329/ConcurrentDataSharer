@@ -11,8 +11,13 @@ ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 	_TCPSendQueue = new BlockingQueue<QueueElementBase*>(255);
 
 	//create my identity
-	_myself=new clientData(_name,getLocalIPV4Adresses(),getLocalIPV6Adresses());
-	_clients[_name]=_myself;
+	_myself = new clientData(_name, getLocalIPV4Adresses(),
+			getLocalIPV6Adresses());
+	_clients[_name] = _myself;
+
+	//handling clients
+	_clientLock = new std::mutex();
+	newClientCallback = NULL;
 
 	_mainThread = new boost::thread(
 			boost::bind(&ConcurrentDataSharer::mainLoop, this));
@@ -37,9 +42,19 @@ void ConcurrentDataSharer::IntroduceMyselfToGroup() {
 	boost::archive::text_oarchive ar(ss);
 	ar << _myself;
 	std::string outbound_data = ss.str();
-	QueueElementMultiSend* data = new QueueElementMultiSend(_name, outbound_data,
-			INTRODUCTION);
+	QueueElementMultiSend* data = new QueueElementMultiSend(_name,
+			outbound_data, INTRODUCTION);
 	_multiSendQueue->Put(dynamic_cast<QueueElementBase*>(data));
+}
+
+std::vector<std::string> ConcurrentDataSharer::getClients() {
+	std::vector<std::string> clients;
+	_clientLock->lock();
+	for (auto it = _clients.begin(); it != _clients.end(); it++) {
+		clients.push_back(it->first);
+	}
+	_clientLock->unlock();
+	return clients;
 }
 
 //runs from mainloop, keep minimal
@@ -48,9 +63,22 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 		if (_dataBase.find(operation->getName()) == _dataBase.end()) {
 			//check all other peers if they have this name
 			_dataBase[operation->getName()] = new DataBaseElement(operation);
+		} else {
+			_dataBase[operation->getName()]->setData(operation->getData());
+			_dataBase[operation->getName()]->runCallback();
 		}
+		delete data;
+	} else if (QueueElementCallback* operation =
+			dynamic_cast<QueueElementCallback*>(data)) {
+		if (_dataBase.find(operation->getName()) != _dataBase.end()) {
+			//check all other peers if they have this name
+			_dataBase[operation->getName()]->setCallback(
+					operation->getCallback());
+		}
+		delete data;
 	}
-	if (QueueElementGet* operation = dynamic_cast<QueueElementGet*>(data)) {
+
+	else if (QueueElementGet* operation = dynamic_cast<QueueElementGet*>(data)) {
 		if (_dataBase.find(operation->getName()) == _dataBase.end()) {
 			//check all other peers if they have this name
 			//_dataBase[operation->getName()]=new DataBaseElement(operation);
@@ -60,7 +88,6 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 			DataBaseElement* element = _dataBase[operation->getName()];
 			operation->setData(element->getData());
 		}
-
 	}
 }
 void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
@@ -77,13 +104,24 @@ void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 		boost::archive::text_iarchive archive(data);
 		clientData* dataReceived = new clientData();
 		archive >> dataReceived;
-		std::cout<<"he has ipadresses:"<<std::endl;
-		std::vector<std::string> adress=dataReceived->getIPV4();
-		for(auto it=adress.begin();it!=adress.end();it++){
-			std::cout<<*it<<std::endl;
+		std::cout << "he has ipadresses:" << std::endl;
+		std::vector<std::string> adress = dataReceived->getIPV4();
+		for (auto it = adress.begin(); it != adress.end(); it++) {
+			std::cout << *it << std::endl;
 		}
-
-
+		bool change = false;
+		_clientLock->lock();
+		if (_clients.find(dataReceived->getName()) == _clients.end()) {
+			_clients[dataReceived->getName()] = dataReceived;
+			change = true;
+		} else {
+			delete dataReceived;
+		}
+		_clientLock->unlock();
+		if (newClientCallback != NULL && change) {
+			std::cout << "calling callack" << std::endl;
+			newClientCallback();
+		}
 		break;
 	}
 	default: {
@@ -92,22 +130,27 @@ void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 	}
 
 	};
-
+	delete data;
 }
 
 void ConcurrentDataSharer::mainLoop() {
 	while (true) {
-		QueueElementBase* data = _TCPSendQueue->Take();
+		QueueElementBase* data = _recvQueue->Take();
 
 		if (QueueElementSet* package = dynamic_cast<QueueElementSet*>(data)) {
 			handleTCPRecv(data);
 		} else if (QueueElementGet* package =
 				dynamic_cast<QueueElementGet*>(data)) {
 			handleTCPRecv(data);
+		} else if (QueueElementCallback* package =
+				dynamic_cast<QueueElementCallback*>(data)) {
+			handleTCPRecv(data);
 		} else if (QueueElementMultiSend* package =
 				dynamic_cast<QueueElementMultiSend*>(data)) {
 			handleMultiRecv(data);
-		} else {
+		}
+
+		else {
 			throw std::runtime_error("no casting in mainloop succesfull");
 		}
 	}
@@ -162,7 +205,7 @@ void ConcurrentDataSharer::MultiSend() {
 						boost::asio::placeholders::error,
 						boost::asio::placeholders::bytes_transferred));
 		io_service_send.run();
-		delete element;
+		delete sendElement;
 	}
 }
 
@@ -192,7 +235,7 @@ void ConcurrentDataSharer::handleMultiRecvData(
 		boost::archive::text_iarchive archive(data);
 		QueueElementMultiSend* dataReceived = new QueueElementMultiSend();
 		archive >> dataReceived;
-		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(dataReceived));
+		_recvQueue->Put(dynamic_cast<QueueElementBase*>(dataReceived));
 
 	} else {
 		throw std::runtime_error("multiRecv error");

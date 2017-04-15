@@ -15,6 +15,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <mutex>
 
 #include <boost/archive/tmpdir.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -54,11 +55,20 @@ public:
 		QueueElementGet* element = new QueueElementGet(name);
 		_recvQueue->Put(element);
 		std::string data = element->getData();
+		delete element;
 		std::istringstream ar(data);
 		boost::archive::text_iarchive ia(ar);
 		T returnData;
 		ia >> returnData;
 		return returnData;
+	}
+	std::vector<std::string> getClients();
+	void registerNewClientCallback(CallbackSig func){
+		newClientCallback=func;
+	}
+	void registerCallback(std::string const& name,CallbackSig func){
+		QueueElementCallback* element = new QueueElementCallback(name,func);
+		_recvQueue->Put(element);
 	}
 
 protected:
@@ -121,6 +131,8 @@ private:
 	//client handling
 	std::unordered_map<std::string, clientData*> _clients;
 	clientData* _myself;
+	std::mutex* _clientLock;
+	CallbackSig newClientCallback;
 
 };
 #endif
