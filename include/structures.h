@@ -5,6 +5,14 @@
 #include <mutex>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/list.hpp>
+#include <boost/serialization/assume_abstract.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/vector.hpp>
+
+
 #include <sstream>
 
 
@@ -79,6 +87,31 @@ private:
 	std::string _name;
 	std::string _data;
 
+};
+
+class clientData{
+public:
+	clientData(){};
+	clientData(std::string name,std::vector<std::string> IPV4,std::vector<std::string> IPV6):_name(name),IPV4Adresses(IPV4),IPV6Adresses(IPV6){};
+	std::vector<std::string> getIPV4(){
+		return IPV4Adresses;
+	}
+	std::vector<std::string> getIPV6(){
+		return IPV6Adresses;
+	}
+	~clientData(){};
+protected:
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & _name;
+		ar & IPV4Adresses;
+		ar& IPV6Adresses;
+	}
+	std::string _name;
+	std::vector<std::string> IPV4Adresses;
+	std::vector<std::string> IPV6Adresses;
 };
 
 #endif

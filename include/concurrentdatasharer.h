@@ -9,6 +9,12 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <arpa/inet.h>
 
 #include <boost/archive/tmpdir.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -26,30 +32,32 @@
 #include "BlockingQueue.h"
 #include <unordered_map>
 
-class ConcurrentDataSharer{
+class ConcurrentDataSharer {
 public:
-	ConcurrentDataSharer(std::string const & groupname,std::string const & multicastadress="239.255.0.1",
-			std::string const & listenadress="0.0.0.0",const short multicastport=30001);
+	ConcurrentDataSharer(std::string const & groupname,
+			std::string const & multicastadress = "239.255.0.1",
+			std::string const & listenadress = "0.0.0.0",
+			const short multicastport = 30001);
 	~ConcurrentDataSharer();
 	template<typename T>
-	void set(std::string const& name,T data){
+	void set(std::string const& name, T data) {
 		std::ostringstream ss;
 		boost::archive::text_oarchive ar(ss);
-		ar<<data;
-		QueueElementSet* element=new QueueElementSet(name,ss.str());
+		ar << data;
+		QueueElementSet* element = new QueueElementSet(name, ss.str());
 		_recvQueue->Put(element);
 
 	}
 
 	template<typename T>
-	T get(std::string const& name){
-		QueueElementGet* element=new QueueElementGet(name);
+	T get(std::string const& name) {
+		QueueElementGet* element = new QueueElementGet(name);
 		_recvQueue->Put(element);
-		std::string data= element->getData();
+		std::string data = element->getData();
 		std::istringstream ar(data);
 		boost::archive::text_iarchive ia(ar);
 		T returnData;
-		ia>>returnData;
+		ia >> returnData;
 		return returnData;
 	}
 
@@ -57,6 +65,8 @@ protected:
 private:
 	ConcurrentDataSharer();
 	std::string generateRandomName(std::size_t);
+	std::vector<std::string> getLocalIPV4Adresses();
+	std::vector<std::string> getLocalIPV6Adresses();
 	//thread functions
 	void mainLoop();
 	void TCPRecv();
@@ -72,12 +82,12 @@ private:
 	void handleMultiRecv(QueueElementBase*);
 
 	void handleMultiRecvData(const boost::system::error_code& error,
-		      size_t bytes_recvd);
-	void handleMultiSendError(const boost::system::error_code& error,size_t);
+			size_t bytes_recvd);
+	void handleMultiSendError(const boost::system::error_code& error, size_t);
 
 //const and initialized at creation
 
-	//name of the group
+//name of the group
 	const std::string _groupName;
 	//multicast
 	const boost::asio::ip::address multicast_address;
@@ -85,29 +95,32 @@ private:
 	const short multicast_port;
 	const std::string _name;
 
-BlockingQueue<QueueElementBase*>* _multiSendQueue;
-BlockingQueue<QueueElementBase*>* _recvQueue;
-BlockingQueue<QueueElementBase*>* _TCPSendQueue;
-boost::thread* _mainThread;
-boost::thread* _TCPSendThread;
-boost::thread* _TCPRecvThread;
-boost::thread* _multiSendThread;
-boost::thread* _multiRecvThread;
-std::unordered_map<std::string, DataBaseElement*> _dataBase;
-
+	BlockingQueue<QueueElementBase*>* _multiSendQueue;
+	BlockingQueue<QueueElementBase*>* _recvQueue;
+	BlockingQueue<QueueElementBase*>* _TCPSendQueue;
+	boost::thread* _mainThread;
+	boost::thread* _TCPSendThread;
+	boost::thread* _TCPRecvThread;
+	boost::thread* _multiSendThread;
+	boost::thread* _multiRecvThread;
+	std::unordered_map<std::string, DataBaseElement*> _dataBase;
 
 //multicast receiving
-boost::asio::ip::udp::socket* socket_recv;
-boost::asio::ip::udp::endpoint sender_endpoint_;
-const std::size_t header_size_=32;
-char inbound_header_[32];
-std::vector<char> inbound_data_;
-boost::asio::io_service io_service_recv;
+	boost::asio::ip::udp::socket* socket_recv;
+	boost::asio::ip::udp::endpoint sender_endpoint_;
+	const std::size_t header_size_ = 32;
+	char inbound_header_[32];
+	std::vector<char> inbound_data_;
+	boost::asio::io_service io_service_recv;
 
 //multicast sending
-boost::asio::io_service io_service_send;
-boost::asio::ip::udp::endpoint* endpoint_;
-boost::asio::ip::udp::socket* socket_send;
+	boost::asio::io_service io_service_send;
+	boost::asio::ip::udp::endpoint* endpoint_;
+	boost::asio::ip::udp::socket* socket_send;
+
+	//client handling
+	std::unordered_map<std::string, clientData*> _clients;
+	clientData* _myself;
 
 };
 #endif
