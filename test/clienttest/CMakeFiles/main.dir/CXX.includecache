@@ -43,6 +43,10 @@ fstream
 -
 string
 -
+stdlib.h
+-
+time.h
+-
 boost/archive/tmpdir.hpp
 -
 boost/archive/text_iarchive.hpp
@@ -78,5 +82,11 @@ string
 condition_variable
 -
 mutex
+-
+boost/archive/text_oarchive.hpp
+-
+boost/archive/text_iarchive.hpp
+-
+sstream
 -
 

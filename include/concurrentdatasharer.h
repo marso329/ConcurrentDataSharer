@@ -7,6 +7,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stdlib.h>
+#include <time.h>
+
 #include <boost/archive/tmpdir.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -25,7 +28,8 @@
 
 class ConcurrentDataSharer{
 public:
-	ConcurrentDataSharer(std::string const &);
+	ConcurrentDataSharer(std::string const & groupname,std::string const & multicastadress="239.255.0.1",
+			std::string const & listenadress="0.0.0.0",const short multicastport=30001);
 	~ConcurrentDataSharer();
 	template<typename T>
 	void set(std::string const& name,T data){
@@ -33,14 +37,14 @@ public:
 		boost::archive::text_oarchive ar(ss);
 		ar<<data;
 		QueueElementSet* element=new QueueElementSet(name,ss.str());
-		_TCPRecvQueue->Put(element);
+		_recvQueue->Put(element);
 
 	}
 
 	template<typename T>
 	T get(std::string const& name){
 		QueueElementGet* element=new QueueElementGet(name);
-		_TCPRecvQueue->Put(element);
+		_recvQueue->Put(element);
 		std::string data= element->getData();
 		std::istringstream ar(data);
 		boost::archive::text_iarchive ia(ar);
@@ -51,6 +55,8 @@ public:
 
 protected:
 private:
+	ConcurrentDataSharer();
+	std::string generateRandomName(std::size_t);
 	//thread functions
 	void mainLoop();
 	void TCPRecv();
@@ -58,20 +64,30 @@ private:
 	void MultiSend();
 	void MultiRecv();
 
+	//group functions
+	void IntroduceMyselfToGroup();
+
 	//handle functions
 	void handleTCPRecv(QueueElementBase*);
 	void handleMultiRecv(QueueElementBase*);
-	void handleMultiRecvRaw(const boost::system::error_code& error,
+
+	void handleMultiRecvData(const boost::system::error_code& error,
 		      size_t bytes_recvd);
+	void handleMultiSendError(const boost::system::error_code& error,size_t);
 
-	void handleMultiSendRaw(const boost::system::error_code& error);
-	void handleMultiSendTimeout(const boost::system::error_code& error);
+//const and initialized at creation
 
-	std::string _groupName;
+	//name of the group
+	const std::string _groupName;
+	//multicast
+	const boost::asio::ip::address multicast_address;
+	const boost::asio::ip::address listen_address;
+	const short multicast_port;
+	const std::string _name;
+
 BlockingQueue<QueueElementBase*>* _multiSendQueue;
-BlockingQueue<QueueElementBase*>* _multiRecvQueue;
+BlockingQueue<QueueElementBase*>* _recvQueue;
 BlockingQueue<QueueElementBase*>* _TCPSendQueue;
-BlockingQueue<QueueElementBase*>* _TCPRecvQueue;
 boost::thread* _mainThread;
 boost::thread* _TCPSendThread;
 boost::thread* _TCPRecvThread;
@@ -79,21 +95,19 @@ boost::thread* _multiSendThread;
 boost::thread* _multiRecvThread;
 std::unordered_map<std::string, DataBaseElement*> _dataBase;
 
+
 //multicast receiving
 boost::asio::ip::udp::socket* socket_recv;
 boost::asio::ip::udp::endpoint sender_endpoint_;
-enum { max_length = 1024 };
-char multiCastData[max_length];
+const std::size_t header_size_=32;
+char inbound_header_[32];
+std::vector<char> inbound_data_;
 boost::asio::io_service io_service_recv;
-const short multicast_port = 30001;
 
 //multicast sending
 boost::asio::io_service io_service_send;
 boost::asio::ip::udp::endpoint* endpoint_;
 boost::asio::ip::udp::socket* socket_send;
-boost::asio::deadline_timer* timer_;
-int message_count_;
-std::string message_;
 
 };
 #endif

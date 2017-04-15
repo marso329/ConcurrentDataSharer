@@ -3,15 +3,21 @@
 #include <string>
 #include <condition_variable>
 #include <mutex>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <sstream>
 
-class QueueElementBase{
+
+class QueueElementBase {
 public:
 	QueueElementBase();
-	virtual ~QueueElementBase(){};
-	std::string getName(){
+	virtual ~QueueElementBase() {
+	}
+	;
+	std::string getName() {
 		return _name;
 	}
-	std::string getData(){
+	std::string getData() {
 		return _data;
 	}
 protected:
@@ -20,24 +26,36 @@ protected:
 private:
 };
 
-class QueueElementSet:public QueueElementBase{
+class QueueElementSet: public QueueElementBase {
 public:
-	QueueElementSet(std::string const&,std::string const&);
+	QueueElementSet(std::string const&, std::string const&);
 	~QueueElementSet();
 private:
 protected:
 };
 
-class QueueElementMultiSend:public QueueElementBase{
+enum MultiSend { UNDEFINED, INTRODUCTION};
+
+class QueueElementMultiSend: public QueueElementBase {
 public:
-	QueueElementMultiSend(std::string const&,std::string const&);
+	QueueElementMultiSend(std::string const&, std::string const&,MultiSend);
+	QueueElementMultiSend();
+	MultiSend getPurpose();
+
 	~QueueElementMultiSend();
 private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & _name;
+		ar & _data;
+		ar& _purpose;
+	}
+	MultiSend _purpose;
 protected:
 };
 
-
-class QueueElementGet:public QueueElementBase{
+class QueueElementGet: public QueueElementBase {
 public:
 	QueueElementGet(std::string const&);
 	std::string getData();
@@ -50,9 +68,9 @@ private:
 protected:
 };
 
-class DataBaseElement{
+class DataBaseElement {
 public:
-	DataBaseElement(std::string const&,std::string const&);
+	DataBaseElement(std::string const&, std::string const&);
 	DataBaseElement(QueueElementSet*);
 	~DataBaseElement();
 	std::string getData();
