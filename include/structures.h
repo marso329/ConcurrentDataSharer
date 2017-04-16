@@ -63,6 +63,30 @@ private:
 protected:
 };
 
+
+
+class QueueElementTCPRecv: public QueueElementBase {
+public:
+	QueueElementTCPRecv(std::string const& name, std::string const& data){
+		_name=name;
+		_data=data;
+	}
+	QueueElementTCPRecv(){
+		_name="";
+		_data="";
+	};
+
+	~QueueElementTCPRecv(){};
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & _name;
+		ar & _data;
+	}
+protected:
+};
+
 class QueueElementGet: public QueueElementBase {
 public:
 	QueueElementGet(std::string const&);

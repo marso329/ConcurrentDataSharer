@@ -89,6 +89,9 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 			operation->setData(element->getData());
 		}
 	}
+	else if(QueueElementTCPRecv* operation = dynamic_cast<QueueElementTCPRecv*>(data)){
+		std::cout<<"received tcp package"<<std::endl;
+	}
 }
 void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 	QueueElementMultiSend* package = dynamic_cast<QueueElementMultiSend*>(data);
@@ -145,7 +148,12 @@ void ConcurrentDataSharer::mainLoop() {
 		} else if (QueueElementCallback* package =
 				dynamic_cast<QueueElementCallback*>(data)) {
 			handleTCPRecv(data);
-		} else if (QueueElementMultiSend* package =
+		} else if (QueueElementTCPRecv* package =
+				dynamic_cast<QueueElementTCPRecv*>(data)) {
+			handleTCPRecv(data);
+		}
+
+		else if (QueueElementMultiSend* package =
 				dynamic_cast<QueueElementMultiSend*>(data)) {
 			handleMultiRecv(data);
 		}
@@ -156,8 +164,69 @@ void ConcurrentDataSharer::mainLoop() {
 	}
 
 }
+void ConcurrentDataSharer::handleTCPRecvData(
+		const boost::system::error_code& error, size_t bytes_recvd,
+		boost::shared_ptr<boost::asio::ip::tcp::socket> sock) {
+
+	std::size_t bufferSize = sock->available();
+	char* buffer = new char[bufferSize];
+	char* headerBuffer = new char[32];
+	boost::system::error_code ec;
+	unsigned int packetSize = sock->read_some(
+			boost::asio::buffer(buffer, bufferSize), ec);
+
+	if (ec) {
+		throw std::runtime_error("fetch failed");
+	}
+	memcpy(headerBuffer, buffer, 32);
+	std::istringstream is(std::string(headerBuffer, 32));
+	std::size_t inbound_data_size = 0;
+	if (!(is >> std::hex >> inbound_data_size)) {
+		throw std::runtime_error("incorrect header");
+	}
+
+	std::istringstream data(std::string(buffer + 32, inbound_data_size));
+
+	if (!error) {
+		boost::archive::text_iarchive archive(data);
+		QueueElementTCPRecv* dataReceived = new QueueElementTCPRecv();
+		archive >> dataReceived;
+		_recvQueue->Put(dynamic_cast<QueueElementBase*>(dataReceived));
+
+	} else {
+		throw std::runtime_error("multiRecv error");
+	}
+	delete buffer;
+	delete headerBuffer;
+	sock->async_receive(boost::asio::null_buffers(),
+			boost::bind(&ConcurrentDataSharer::handleTCPRecvData, this,
+					boost::asio::placeholders::error,
+					boost::asio::placeholders::bytes_transferred, sock));
+
+}
+
+void ConcurrentDataSharer::TCPRecvSession(
+		boost::shared_ptr<boost::asio::ip::tcp::socket> sock) {
+
+	sock->async_receive(boost::asio::null_buffers(),
+			boost::bind(&ConcurrentDataSharer::handleTCPRecvData, this,
+					boost::asio::placeholders::error,
+					boost::asio::placeholders::bytes_transferred, sock));
+	io_service_TCP_recv.run();
+}
 
 void ConcurrentDataSharer::TCPRecv() {
+	boost::asio::ip::tcp::acceptor acceptor(io_service_TCP_recv,
+			boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
+					TCP_recv_port));
+	while (true) {
+		boost::shared_ptr<boost::asio::ip::tcp::socket> sock(
+				new boost::asio::ip::tcp::socket(io_service_TCP_recv));
+		acceptor.accept(*sock);
+		boost::thread t(
+				boost::bind(&ConcurrentDataSharer::TCPRecvSession, this, sock));
+	}
+
 }
 
 void ConcurrentDataSharer::TCPSend() {

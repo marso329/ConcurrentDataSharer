@@ -89,6 +89,11 @@ private:
 
 	//handle functions
 	void handleTCPRecv(QueueElementBase*);
+	void TCPRecvSession(boost::shared_ptr<boost::asio::ip::tcp::socket>  sock);
+	void handleTCPRecvData(const boost::system::error_code& error,
+			size_t bytes_recvd,boost::shared_ptr<boost::asio::ip::tcp::socket> sock);
+
+
 	void handleMultiRecv(QueueElementBase*);
 
 	void handleMultiRecvData(const boost::system::error_code& error,
@@ -127,6 +132,10 @@ private:
 	boost::asio::io_service io_service_send;
 	boost::asio::ip::udp::endpoint* endpoint_;
 	boost::asio::ip::udp::socket* socket_send;
+
+//TCP recv
+	 boost::asio::io_service io_service_TCP_recv;
+	 const short TCP_recv_port=30010;
 
 	//client handling
 	std::unordered_map<std::string, clientData*> _clients;
