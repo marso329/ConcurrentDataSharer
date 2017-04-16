@@ -42,7 +42,7 @@ private:
 protected:
 };
 
-enum MultiSend { UNDEFINED, INTRODUCTION};
+enum MultiSend { MULTIUNDEFINED, MULTIINTRODUCTION};
 
 class QueueElementMultiSend: public QueueElementBase {
 public:
@@ -63,29 +63,37 @@ private:
 protected:
 };
 
+enum TCPSend { TCPUNDEFINED, TCPSENDVARIABLES,TCPREPLYVARIABLES};
 
-
-class QueueElementTCPRecv: public QueueElementBase {
+class QueueElementTCPSend: public QueueElementBase {
 public:
-	QueueElementTCPRecv(std::string const& name, std::string const& data){
-		_name=name;
-		_data=data;
+	QueueElementTCPSend(std::string const& name, std::string const& data,TCPSend purpose){
+ _name=name;
+ _data=data;
+ _purpose=purpose;
 	}
-	QueueElementTCPRecv(){
+	QueueElementTCPSend(){
 		_name="";
 		_data="";
+		_purpose=TCPUNDEFINED;
+	};
+	TCPSend getPurpose(){
+		return _purpose;
 	};
 
-	~QueueElementTCPRecv(){};
+	~QueueElementTCPSend(){};
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & _name;
 		ar & _data;
+		ar& _purpose;
 	}
+	TCPSend _purpose;
 protected:
 };
+
 
 class QueueElementGet: public QueueElementBase {
 public:

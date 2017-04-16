@@ -13,6 +13,9 @@ int main(int argc, char ** argv) {
 	sharer->registerCallback("hello",&newClient);
 	sharer->set<int>("hello", 42);
 	value = sharer->get<int>("hello");
+	std::string name= sharer->getMyName();
+	std::cout<<"myname:"<<name<<std::endl;
+	sharer->getClientVariables(name);
 
 std::cout<<"value"<<value<<std::endl;
 	usleep(100000000);

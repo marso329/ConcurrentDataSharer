@@ -61,7 +61,7 @@ QueueElementMultiSend::QueueElementMultiSend(std::string const& name,
 }
 
 
-QueueElementMultiSend::QueueElementMultiSend():_purpose(MultiSend::UNDEFINED) {
+QueueElementMultiSend::QueueElementMultiSend():_purpose(MULTIUNDEFINED) {
 	_name = "";
 	_data = "";
 }

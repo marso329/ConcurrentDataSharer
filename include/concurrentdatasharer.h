@@ -71,6 +71,12 @@ public:
 		_recvQueue->Put(element);
 	}
 
+	std::string getMyName(){
+		return _name;
+	}
+	std::vector<std::string> getClientVariables(std::string const & client);
+
+
 protected:
 private:
 	ConcurrentDataSharer();
@@ -92,13 +98,16 @@ private:
 	void TCPRecvSession(boost::shared_ptr<boost::asio::ip::tcp::socket>  sock);
 	void handleTCPRecvData(const boost::system::error_code& error,
 			size_t bytes_recvd,boost::shared_ptr<boost::asio::ip::tcp::socket> sock);
-
+	void handleQueueElementTCPSend(QueueElementTCPSend*);
 
 	void handleMultiRecv(QueueElementBase*);
+
+
 
 	void handleMultiRecvData(const boost::system::error_code& error,
 			size_t bytes_recvd);
 	void handleMultiSendError(const boost::system::error_code& error, size_t);
+	void handleTCPSendError(const boost::system::error_code& error, size_t);
 
 //const and initialized at creation
 
@@ -136,6 +145,14 @@ private:
 //TCP recv
 	 boost::asio::io_service io_service_TCP_recv;
 	 const short TCP_recv_port=30010;
+
+//TCP send
+	 boost::asio::io_service io_service_TCP_send;
+	// boost::asio::ip::tcp::socket* socket_TCP_send;
+	// boost::asio::ip::tcp::resolver* resolver_TCP;
+
+	 // boost::asio::ip::tcp::endpoint* endpoint_TCP;
+
 
 	//client handling
 	std::unordered_map<std::string, clientData*> _clients;

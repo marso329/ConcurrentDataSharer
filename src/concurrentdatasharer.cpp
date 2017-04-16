@@ -43,7 +43,7 @@ void ConcurrentDataSharer::IntroduceMyselfToGroup() {
 	ar << _myself;
 	std::string outbound_data = ss.str();
 	QueueElementMultiSend* data = new QueueElementMultiSend(_name,
-			outbound_data, INTRODUCTION);
+			outbound_data, MULTIINTRODUCTION);
 	_multiSendQueue->Put(dynamic_cast<QueueElementBase*>(data));
 }
 
@@ -55,6 +55,15 @@ std::vector<std::string> ConcurrentDataSharer::getClients() {
 	}
 	_clientLock->unlock();
 	return clients;
+}
+
+std::vector<std::string> ConcurrentDataSharer::getClientVariables(
+		std::string const & client) {
+	std::vector<std::string> toReturn;
+	QueueElementTCPSend * toSend = new QueueElementTCPSend(client, "",
+			TCPSENDVARIABLES);
+	_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+	return toReturn;
 }
 
 //runs from mainloop, keep minimal
@@ -89,18 +98,50 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 			operation->setData(element->getData());
 		}
 	}
-	else if(QueueElementTCPRecv* operation = dynamic_cast<QueueElementTCPRecv*>(data)){
-		std::cout<<"received tcp package"<<std::endl;
-	}
 }
+
+void ConcurrentDataSharer::handleQueueElementTCPSend(QueueElementTCPSend* data) {
+	switch(data->getPurpose()){
+	case TCPSENDVARIABLES:{
+		std::vector<std::string> variables;
+		for(auto it= _dataBase.begin();it!=_dataBase.end();it++){
+			variables.push_back(it->first);
+		}
+		std::ostringstream ss;
+		boost::archive::text_oarchive ar(ss);
+		ar << variables;
+		std::string outbound_data = ss.str();
+
+		QueueElementTCPSend* toSend=new QueueElementTCPSend(data->getName(),outbound_data,TCPREPLYVARIABLES);
+		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+		std::cout<<"got request for tcp variables from"<<data->getName()<<std::endl;
+		delete data;
+		break;
+	}
+	case TCPUNDEFINED:{
+		throw std::runtime_error("undefined tcp action");
+		break;
+	}
+	case TCPREPLYVARIABLES:{
+		std::cout<<"got variables"<<std::endl;
+		delete data;
+		break;
+	}
+	default:{
+		throw std::runtime_error("unknown tcp action");
+	}
+	}
+
+}
+
 void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 	QueueElementMultiSend* package = dynamic_cast<QueueElementMultiSend*>(data);
 	switch (package->getPurpose()) {
-	case UNDEFINED: {
+	case MULTIUNDEFINED: {
 		throw std::runtime_error("undefined multisend package");
 		break;
 	}
-	case INTRODUCTION: {
+	case MULTIINTRODUCTION: {
 		std::cout << "Node: " << package->getName() << " joined" << std::endl;
 
 		std::istringstream data(package->getData());
@@ -148,9 +189,10 @@ void ConcurrentDataSharer::mainLoop() {
 		} else if (QueueElementCallback* package =
 				dynamic_cast<QueueElementCallback*>(data)) {
 			handleTCPRecv(data);
-		} else if (QueueElementTCPRecv* package =
-				dynamic_cast<QueueElementTCPRecv*>(data)) {
-			handleTCPRecv(data);
+		} else if (QueueElementTCPSend* package =
+				dynamic_cast<QueueElementTCPSend*>(data)) {
+			handleQueueElementTCPSend(package);
+			//handleTCPRecv(data);
 		}
 
 		else if (QueueElementMultiSend* package =
@@ -167,8 +209,17 @@ void ConcurrentDataSharer::mainLoop() {
 void ConcurrentDataSharer::handleTCPRecvData(
 		const boost::system::error_code& error, size_t bytes_recvd,
 		boost::shared_ptr<boost::asio::ip::tcp::socket> sock) {
+	if(error){
+		std::cout<<"error"<<std::endl;
+		return;
+
+	}
 
 	std::size_t bufferSize = sock->available();
+	std::cout<<"buffersize"<<bufferSize<<std::endl;
+	if(bufferSize==0){
+		return;
+	}
 	char* buffer = new char[bufferSize];
 	char* headerBuffer = new char[32];
 	boost::system::error_code ec;
@@ -189,7 +240,7 @@ void ConcurrentDataSharer::handleTCPRecvData(
 
 	if (!error) {
 		boost::archive::text_iarchive archive(data);
-		QueueElementTCPRecv* dataReceived = new QueueElementTCPRecv();
+		QueueElementTCPSend* dataReceived = new QueueElementTCPSend();
 		archive >> dataReceived;
 		_recvQueue->Put(dynamic_cast<QueueElementBase*>(dataReceived));
 
@@ -198,21 +249,46 @@ void ConcurrentDataSharer::handleTCPRecvData(
 	}
 	delete buffer;
 	delete headerBuffer;
-	sock->async_receive(boost::asio::null_buffers(),
+/**	sock->async_receive(boost::asio::null_buffers(),
 			boost::bind(&ConcurrentDataSharer::handleTCPRecvData, this,
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred, sock));
-
+**/
 }
 
 void ConcurrentDataSharer::TCPRecvSession(
 		boost::shared_ptr<boost::asio::ip::tcp::socket> sock) {
+ std::cout<<"TCPRecvSession"<<std::endl;
+std::cout<<"avail: "<<sock->available()<<std::endl;
+std::size_t bufferSize = sock->available();
+if(bufferSize==0){
+	return;
+}
+char* buffer = new char[bufferSize];
+char* headerBuffer = new char[32];
+boost::system::error_code ec;
+unsigned int packetSize = sock->read_some(
+		boost::asio::buffer(buffer, bufferSize), ec);
 
-	sock->async_receive(boost::asio::null_buffers(),
-			boost::bind(&ConcurrentDataSharer::handleTCPRecvData, this,
-					boost::asio::placeholders::error,
-					boost::asio::placeholders::bytes_transferred, sock));
-	io_service_TCP_recv.run();
+if (ec) {
+	throw std::runtime_error("fetch failed");
+}
+memcpy(headerBuffer, buffer, 32);
+std::istringstream is(std::string(headerBuffer, 32));
+std::size_t inbound_data_size = 0;
+if (!(is >> std::hex >> inbound_data_size)) {
+	throw std::runtime_error("incorrect header");
+}
+
+std::istringstream data(std::string(buffer + 32, inbound_data_size));
+
+	boost::archive::text_iarchive archive(data);
+	QueueElementTCPSend* dataReceived = new QueueElementTCPSend();
+	archive >> dataReceived;
+	_recvQueue->Put(dynamic_cast<QueueElementBase*>(dataReceived));
+
+delete buffer;
+delete headerBuffer;
 }
 
 void ConcurrentDataSharer::TCPRecv() {
@@ -223,6 +299,7 @@ void ConcurrentDataSharer::TCPRecv() {
 		boost::shared_ptr<boost::asio::ip::tcp::socket> sock(
 				new boost::asio::ip::tcp::socket(io_service_TCP_recv));
 		acceptor.accept(*sock);
+		std::cout<<"accepted on vall"<<std::endl;
 		boost::thread t(
 				boost::bind(&ConcurrentDataSharer::TCPRecvSession, this, sock));
 	}
@@ -230,6 +307,67 @@ void ConcurrentDataSharer::TCPRecv() {
 }
 
 void ConcurrentDataSharer::TCPSend() {
+	//socket_TCP_send = new boost::asio::ip::tcp::socket(io_service_TCP_send);
+	while (true) {
+		QueueElementBase* data = _TCPSendQueue->Take();
+		boost::shared_ptr<boost::asio::ip::tcp::socket> socket_TCP_send(
+				new boost::asio::ip::tcp::socket(io_service_TCP_recv));
+		boost::shared_ptr<boost::asio::ip::tcp::resolver> resolver_TCP(new boost::asio::ip::tcp::resolver(io_service_TCP_send));
+
+		std::cout<<"sendt on package"<<std::endl;
+		QueueElementTCPSend* operation =
+				dynamic_cast<QueueElementTCPSend*>(data);
+		std::ostringstream port;
+		port << TCP_recv_port;
+		_clientLock->lock();
+		auto it = _clients.find(operation->getName());
+		if (it == _clients.end()) {
+			delete data;
+			_clientLock->unlock();
+			continue;
+		}
+		std::vector<std::string> clientadresses = (*it).second->getIPV4();
+		_clientLock->unlock();
+		if (clientadresses.size() == 0) {
+			delete data;
+			continue;
+		}
+		boost::asio::ip::tcp::resolver::iterator endpoint =
+				resolver_TCP->resolve(
+						boost::asio::ip::tcp::resolver::query(clientadresses[0],
+								port.str()));
+		boost::asio::connect(*socket_TCP_send, endpoint);
+
+		//prepare data
+		std::ostringstream ss;
+		boost::archive::text_oarchive ar(ss);
+		ar << operation;
+		std::string outbound_data = ss.str();
+		//prepare header
+		std::ostringstream header_stream;
+		header_stream << std::setw(32) << std::hex << outbound_data.size();
+		std::string outbound_header = header_stream.str();
+		//push header and data to buffer
+		std::vector<boost::asio::const_buffer> buffers;
+		buffers.push_back(boost::asio::buffer(outbound_header));
+		buffers.push_back(boost::asio::buffer(outbound_data));
+		//socket_TCP_send->send(buffers);
+		socket_TCP_send->async_send(buffers,
+				boost::bind(&ConcurrentDataSharer::handleTCPSendError, this,
+						boost::asio::placeholders::error,
+						boost::asio::placeholders::bytes_transferred));
+		io_service_send.run_one();
+		delete data;
+	}
+}
+
+void ConcurrentDataSharer::handleTCPSendError(
+		const boost::system::error_code& error, size_t bytes_recvd) {
+	if (error) {
+		throw std::runtime_error("Multicast send failed");
+	}
+	//socket_TCP_send->close();
+
 
 }
 
@@ -367,8 +505,9 @@ std::vector<std::string> ConcurrentDataSharer::getLocalIPV4Adresses() {
 			tmpAddrPtr = &((struct sockaddr_in *) ifa->ifa_addr)->sin_addr;
 			char addressBuffer[INET_ADDRSTRLEN];
 			inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
-			adresses.push_back(std::string(addressBuffer));
-
+			if (strcmp(addressBuffer, "127.0.0.1") != 0) {
+				adresses.push_back(std::string(addressBuffer));
+			}
 		}
 	}
 	if (ifAddrStruct != NULL)
