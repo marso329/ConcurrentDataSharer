@@ -59,11 +59,16 @@ std::vector<std::string> ConcurrentDataSharer::getClients() {
 
 std::vector<std::string> ConcurrentDataSharer::getClientVariables(
 		std::string const & client) {
-	std::vector<std::string> toReturn;
 	QueueElementTCPSend * toSend = new QueueElementTCPSend(client, "",
-			TCPSENDVARIABLES);
+			TCPSENDVARIABLES,true);
 	_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
-	return toReturn;
+	std::string data = toSend->getData();
+	delete toSend;
+	std::istringstream ar(data);
+	boost::archive::text_iarchive ia(ar);
+	std::vector<std::string> returnData;
+	ia >> returnData;
+	return returnData;
 }
 
 //runs from mainloop, keep minimal
@@ -112,7 +117,8 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(QueueElementTCPSend* data) 
 		ar << variables;
 		std::string outbound_data = ss.str();
 
-		QueueElementTCPSend* toSend=new QueueElementTCPSend(data->getName(),outbound_data,TCPREPLYVARIABLES);
+		QueueElementTCPSend* toSend=new QueueElementTCPSend(data->getName(),outbound_data,TCPREPLYVARIABLES,false);
+		toSend->setTag(data->getTag());
 		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
 		std::cout<<"got request for tcp variables from"<<data->getName()<<std::endl;
 		delete data;
@@ -124,7 +130,14 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(QueueElementTCPSend* data) 
 	}
 	case TCPREPLYVARIABLES:{
 		std::cout<<"got variables"<<std::endl;
+		auto it= _requests.find(data->getTag());
+		if(it==_requests.end()){
+			throw std::runtime_error("request not found");
+		}
+		it->second->setData(data->getDataNoneBlocking());
+		_requests.erase(it);
 		delete data;
+		std::cout<<"got reply ";
 		break;
 	}
 	default:{
@@ -317,6 +330,14 @@ void ConcurrentDataSharer::TCPSend() {
 		std::cout<<"sendt on package"<<std::endl;
 		QueueElementTCPSend* operation =
 				dynamic_cast<QueueElementTCPSend*>(data);
+		if(operation->getResponsRequired()){
+			operation->setTag(generateRandomName(20));
+			while(_requests.find(operation->getTag())!=_requests.end()){
+				operation->setTag(generateRandomName(20));
+			}
+			_requests[operation->getTag()]=operation;
+
+		}
 		std::ostringstream port;
 		port << TCP_recv_port;
 		_clientLock->lock();
@@ -357,8 +378,10 @@ void ConcurrentDataSharer::TCPSend() {
 						boost::asio::placeholders::error,
 						boost::asio::placeholders::bytes_transferred));
 		io_service_send.run_one();
+		if(!operation->getResponsRequired()){
 		delete data;
-	}
+		}
+		}
 }
 
 void ConcurrentDataSharer::handleTCPSendError(

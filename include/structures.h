@@ -13,8 +13,7 @@
 #include <boost/serialization/vector.hpp>
 #include <sstream>
 
-
-typedef void (* CallbackSig)();
+typedef void (*CallbackSig)();
 
 class QueueElementBase {
 public:
@@ -42,11 +41,13 @@ private:
 protected:
 };
 
-enum MultiSend { MULTIUNDEFINED, MULTIINTRODUCTION};
+enum MultiSend {
+	MULTIUNDEFINED, MULTIINTRODUCTION
+};
 
 class QueueElementMultiSend: public QueueElementBase {
 public:
-	QueueElementMultiSend(std::string const&, std::string const&,MultiSend);
+	QueueElementMultiSend(std::string const&, std::string const&, MultiSend);
 	QueueElementMultiSend();
 	MultiSend getPurpose();
 
@@ -57,43 +58,82 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & _name;
 		ar & _data;
-		ar& _purpose;
+		ar & _purpose;
 	}
 	MultiSend _purpose;
 protected:
 };
 
-enum TCPSend { TCPUNDEFINED, TCPSENDVARIABLES,TCPREPLYVARIABLES};
+enum TCPSend {
+	TCPUNDEFINED, TCPSENDVARIABLES, TCPREPLYVARIABLES
+};
 
 class QueueElementTCPSend: public QueueElementBase {
 public:
-	QueueElementTCPSend(std::string const& name, std::string const& data,TCPSend purpose){
- _name=name;
- _data=data;
- _purpose=purpose;
+	QueueElementTCPSend(std::string const& name, std::string const& data,
+			TCPSend purpose, bool respons):_responsRequired(respons) {
+		_name = name;
+		_data = data;
+		_purpose = purpose;
+		_tag="";
 	}
-	QueueElementTCPSend(){
-		_name="";
-		_data="";
-		_purpose=TCPUNDEFINED;
-	};
-	TCPSend getPurpose(){
+	QueueElementTCPSend():_responsRequired(false) {
+		_name = "";
+		_data = "";
+		_purpose = TCPUNDEFINED;
+	_tag="";
+	}
+	;
+	void setTag(std::string const& tag){
+		_tag=tag;
+	}
+	std::string getTag(){
+		return _tag;
+	}
+	bool getResponsRequired(){
+		return _responsRequired;
+	}
+	TCPSend getPurpose() {
 		return _purpose;
-	};
+	}
+	;
+	void setData(std::string const& data){
+		_data = data;
+		{
+			std::lock_guard < std::mutex > lk(m);
+			ready = true;
+		}
+		cv.notify_one();
+	}
+	std::string getData() {
+		std::unique_lock < std::mutex > lk(m);
+		cv.wait(lk, [this] {return ready;});
+		return _data;
+	}
+	std::string getDataNoneBlocking() {
+		return _data;
+	}
 
-	~QueueElementTCPSend(){};
+	~QueueElementTCPSend() {
+	}
+	;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & _name;
 		ar & _data;
-		ar& _purpose;
+		ar & _purpose;
+		ar & _tag;
 	}
 	TCPSend _purpose;
+	const bool _responsRequired;
+	std::string _tag;
+	std::condition_variable cv;
+	bool ready = false;
+	std::mutex m;
 protected:
 };
-
 
 class QueueElementGet: public QueueElementBase {
 public:
@@ -110,14 +150,16 @@ protected:
 
 class QueueElementCallback: public QueueElementBase {
 public:
-	QueueElementCallback(std::string const& name,CallbackSig func){
-_name=name;
-	callback=func;
+	QueueElementCallback(std::string const& name, CallbackSig func) {
+		_name = name;
+		callback = func;
 	}
-	CallbackSig getCallback(){
+	CallbackSig getCallback() {
 		return callback;
 	}
-	~QueueElementCallback(){};
+	~QueueElementCallback() {
+	}
+	;
 private:
 	CallbackSig callback;
 protected:
@@ -129,14 +171,14 @@ public:
 	DataBaseElement(QueueElementSet*);
 	~DataBaseElement();
 	std::string getData();
-	void setData(std::string const& data){
-		_data=data;
+	void setData(std::string const& data) {
+		_data = data;
 	}
-	void setCallback(CallbackSig func){
-		callback=func;
+	void setCallback(CallbackSig func) {
+		callback = func;
 	}
-	void runCallback(){
-		if(callback!=NULL){
+	void runCallback() {
+		if (callback != NULL) {
 			callback();
 		}
 	}
@@ -148,20 +190,28 @@ private:
 
 };
 
-class clientData{
+class clientData {
 public:
-	clientData(){};
-	clientData(std::string name,std::vector<std::string> IPV4,std::vector<std::string> IPV6):_name(name),IPV4Adresses(IPV4),IPV6Adresses(IPV6){};
-	std::vector<std::string> getIPV4(){
+	clientData() {
+	}
+	;
+	clientData(std::string name, std::vector<std::string> IPV4,
+			std::vector<std::string> IPV6) :
+			_name(name), IPV4Adresses(IPV4), IPV6Adresses(IPV6) {
+	}
+	;
+	std::vector<std::string> getIPV4() {
 		return IPV4Adresses;
 	}
-	std::vector<std::string> getIPV6(){
+	std::vector<std::string> getIPV6() {
 		return IPV6Adresses;
 	}
-	std::string getName(){
+	std::string getName() {
 		return _name;
 	}
-	~clientData(){};
+	~clientData() {
+	}
+	;
 protected:
 private:
 	friend class boost::serialization::access;
@@ -169,7 +219,7 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & _name;
 		ar & IPV4Adresses;
-		ar& IPV6Adresses;
+		ar & IPV6Adresses;
 	}
 	std::string _name;
 	std::vector<std::string> IPV4Adresses;

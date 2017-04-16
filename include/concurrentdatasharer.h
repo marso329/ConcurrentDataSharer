@@ -148,10 +148,9 @@ private:
 
 //TCP send
 	 boost::asio::io_service io_service_TCP_send;
-	// boost::asio::ip::tcp::socket* socket_TCP_send;
-	// boost::asio::ip::tcp::resolver* resolver_TCP;
 
-	 // boost::asio::ip::tcp::endpoint* endpoint_TCP;
+//request connection
+		std::unordered_map<std::string, QueueElementTCPSend*> _requests;
 
 
 	//client handling

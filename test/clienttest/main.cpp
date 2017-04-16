@@ -15,8 +15,11 @@ int main(int argc, char ** argv) {
 	value = sharer->get<int>("hello");
 	std::string name= sharer->getMyName();
 	std::cout<<"myname:"<<name<<std::endl;
-	sharer->getClientVariables(name);
-
+	std::vector<std::string> var= sharer->getClientVariables(name);
+	std::cout<<"function returns"<<std::endl;
+	for(auto it=var.begin();it!=var.end();it++){
+	std::cout<<"adadaw: "<<*it<<std::endl;
+}
 std::cout<<"value"<<value<<std::endl;
 	usleep(100000000);
 }
