@@ -117,8 +117,9 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(QueueElementTCPSend* data) 
 		ar << variables;
 		std::string outbound_data = ss.str();
 
-		QueueElementTCPSend* toSend=new QueueElementTCPSend(data->getName(),outbound_data,TCPREPLYVARIABLES,false);
+		QueueElementTCPSend* toSend=new QueueElementTCPSend(data->getRequestor(),outbound_data,TCPREPLYVARIABLES,false);
 		toSend->setTag(data->getTag());
+		toSend->setRequestor(getMyName());
 		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
 		std::cout<<"got request for tcp variables from"<<data->getName()<<std::endl;
 		delete data;
@@ -330,6 +331,7 @@ void ConcurrentDataSharer::TCPSend() {
 		std::cout<<"sendt on package"<<std::endl;
 		QueueElementTCPSend* operation =
 				dynamic_cast<QueueElementTCPSend*>(data);
+		operation->setRequestor(getMyName());
 		if(operation->getResponsRequired()){
 			operation->setTag(generateRandomName(20));
 			while(_requests.find(operation->getTag())!=_requests.end()){

@@ -76,6 +76,7 @@ public:
 		_data = data;
 		_purpose = purpose;
 		_tag="";
+
 	}
 	QueueElementTCPSend():_responsRequired(false) {
 		_name = "";
@@ -97,6 +98,13 @@ public:
 		return _purpose;
 	}
 	;
+	void setRequestor(std::string const& requestor){
+		_requestor=requestor;
+	}
+
+	std::string getRequestor(){
+		return _requestor;
+	}
 	void setData(std::string const& data){
 		_data = data;
 		{
@@ -125,10 +133,12 @@ private:
 		ar & _data;
 		ar & _purpose;
 		ar & _tag;
+		ar & _requestor;
 	}
 	TCPSend _purpose;
 	const bool _responsRequired;
 	std::string _tag;
+	std::string _requestor;
 	std::condition_variable cv;
 	bool ready = false;
 	std::mutex m;
