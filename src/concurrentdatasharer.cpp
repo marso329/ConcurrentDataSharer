@@ -341,7 +341,7 @@ if(dataRead!=32){
 	std::cout<<"header read failed";
 }
 
-	std::cout << "reveived: " << dataRead << " bytes of data" << std::endl;
+	std::cout << "reveived: " << dataRead << " bytes of data for header" << std::endl;
 	if (ec) {
 		throw std::runtime_error("fetch failed");
 	}
@@ -352,7 +352,11 @@ if(dataRead!=32){
 		throw std::runtime_error("incorrect header");
 	}
 	char* buffer = new char[inbound_data_size];
+
+	std::cout << "giong to try to receive: " << inbound_data_size << " bytes of data" << std::endl;
+
 	dataRead =boost::asio::read(*sock, boost::asio::buffer(buffer, inbound_data_size));
+	std::cout << "reveived: " << dataRead << " bytes of data" << std::endl;
 
 
 	std::istringstream data(std::string(buffer, inbound_data_size));
