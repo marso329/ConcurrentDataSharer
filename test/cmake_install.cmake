@@ -1,4 +1,4 @@
-# Install script for directory: /home/martin/repositories/ConcurrentDataSharer/test
+# Install script for directory: /home/soderen/repositories/ConcurrentDataSharer/test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/martin/repositories/ConcurrentDataSharer/test/clienttest/cmake_install.cmake")
+  include("/home/soderen/repositories/ConcurrentDataSharer/test/clienttest/cmake_install.cmake")
 
 endif()
 

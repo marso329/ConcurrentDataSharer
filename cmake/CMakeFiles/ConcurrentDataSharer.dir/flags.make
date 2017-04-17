@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11 -O3 -DNDEBUG -fPIC
 
 CXX_DEFINES = -DConcurrentDataSharer_EXPORTS
 
-CXX_INCLUDES = -I/home/martin/repositories/ConcurrentDataSharer/cmake/../include 
+CXX_INCLUDES = -I/home/soderen/repositories/ConcurrentDataSharer/cmake/../include 
 

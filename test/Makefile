@@ -48,13 +48,46 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/martin/repositories/ConcurrentDataSharer
+CMAKE_SOURCE_DIR = /home/soderen/repositories/ConcurrentDataSharer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/martin/repositories/ConcurrentDataSharer
+CMAKE_BINARY_DIR = /home/soderen/repositories/ConcurrentDataSharer
 
 #=============================================================================
 # Targets provided globally by CMake.
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+
+.PHONY : install/strip/fast
 
 # Special rule for the target install/local
 install/local: preinstall
@@ -89,38 +122,16 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
 # The main all target
 all: cmake_check_build_system
-	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_progress_start /home/martin/repositories/ConcurrentDataSharer/CMakeFiles /home/martin/repositories/ConcurrentDataSharer/test/CMakeFiles/progress.marks
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/martin/repositories/ConcurrentDataSharer/CMakeFiles 0
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_progress_start /home/soderen/repositories/ConcurrentDataSharer/CMakeFiles /home/soderen/repositories/ConcurrentDataSharer/test/CMakeFiles/progress.marks
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/soderen/repositories/ConcurrentDataSharer/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clean
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clean
 .PHONY : clean
 
 # The main clean target
@@ -130,17 +141,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -149,11 +160,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... install"
+	@echo "... list_install_components"
+	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... install"
-	@echo "... list_install_components"
 .PHONY : help
 
 
@@ -165,6 +177,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

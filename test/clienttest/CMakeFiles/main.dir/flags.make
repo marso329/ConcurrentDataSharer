@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/martin/repositories/ConcurrentDataSharer/test/clienttest/../../include 
+CXX_INCLUDES = -I/home/soderen/repositories/ConcurrentDataSharer/test/clienttest/../../include 
 
