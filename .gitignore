@@ -11,3 +11,4 @@ lib/*
 bin/*
 build/
 *.o
+*.so
