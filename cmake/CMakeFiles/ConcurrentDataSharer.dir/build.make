@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/soderen/repositories/ConcurrentDataSharer
+CMAKE_SOURCE_DIR = /home/martin/repositories/ConcurrentDataSharer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/soderen/repositories/ConcurrentDataSharer
+CMAKE_BINARY_DIR = /home/martin/repositories/ConcurrentDataSharer
 
 # Include any dependencies generated for this target.
 include cmake/CMakeFiles/ConcurrentDataSharer.dir/depend.make
@@ -57,42 +57,18 @@ include cmake/CMakeFiles/ConcurrentDataSharer.dir/progress.make
 # Include the compile flags for this target's objects.
 include cmake/CMakeFiles/ConcurrentDataSharer.dir/flags.make
 
-cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o: cmake/CMakeFiles/ConcurrentDataSharer.dir/flags.make
-cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o: src/structures.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/soderen/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o -c /home/soderen/repositories/ConcurrentDataSharer/src/structures.cpp
-
-cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/soderen/repositories/ConcurrentDataSharer/src/structures.cpp > CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i
-
-cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/soderen/repositories/ConcurrentDataSharer/src/structures.cpp -o CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s
-
-cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires:
-
-.PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires
-
-cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires
-	$(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides.build
-.PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides
-
-cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides.build: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o
-
-
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o: cmake/CMakeFiles/ConcurrentDataSharer.dir/flags.make
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o: src/concurrentdatasharer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/soderen/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o -c /home/soderen/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o"
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o -c /home/martin/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.i"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/soderen/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp > CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.i
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp > CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.i
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.s"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/soderen/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp -o CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.s
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp -o CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.s
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o.requires:
 
@@ -107,16 +83,16 @@ cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o.prov
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o: cmake/CMakeFiles/ConcurrentDataSharer.dir/flags.make
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o: src/BlockingQueue.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/soderen/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o -c /home/soderen/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o"
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o -c /home/martin/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.i"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/soderen/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp > CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.i
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp > CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.i
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.s"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/soderen/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp -o CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.s
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp -o CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.s
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o.requires:
 
@@ -129,39 +105,63 @@ cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o.provides: c
 cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o.provides.build: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o
 
 
+cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o: cmake/CMakeFiles/ConcurrentDataSharer.dir/flags.make
+cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o: src/structures.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o"
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o -c /home/martin/repositories/ConcurrentDataSharer/src/structures.cpp
+
+cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i"
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/repositories/ConcurrentDataSharer/src/structures.cpp > CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i
+
+cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s"
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/repositories/ConcurrentDataSharer/src/structures.cpp -o CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s
+
+cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires:
+
+.PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires
+
+cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires
+	$(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides.build
+.PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides
+
+cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.provides.build: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o
+
+
 # Object files for target ConcurrentDataSharer
 ConcurrentDataSharer_OBJECTS = \
-"CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o" \
 "CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o" \
-"CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o"
+"CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o" \
+"CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o"
 
 # External object files for target ConcurrentDataSharer
 ConcurrentDataSharer_EXTERNAL_OBJECTS =
 
-lib/libConcurrentDataSharer.so: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o
 lib/libConcurrentDataSharer.so: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o
 lib/libConcurrentDataSharer.so: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o
+lib/libConcurrentDataSharer.so: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o
 lib/libConcurrentDataSharer.so: cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make
 lib/libConcurrentDataSharer.so: cmake/CMakeFiles/ConcurrentDataSharer.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/soderen/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX shared library ../lib/libConcurrentDataSharer.so"
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ConcurrentDataSharer.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/martin/repositories/ConcurrentDataSharer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX shared library ../lib/libConcurrentDataSharer.so"
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ConcurrentDataSharer.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 cmake/CMakeFiles/ConcurrentDataSharer.dir/build: lib/libConcurrentDataSharer.so
 
 .PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/build
 
-cmake/CMakeFiles/ConcurrentDataSharer.dir/requires: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires
 cmake/CMakeFiles/ConcurrentDataSharer.dir/requires: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o.requires
 cmake/CMakeFiles/ConcurrentDataSharer.dir/requires: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o.requires
+cmake/CMakeFiles/ConcurrentDataSharer.dir/requires: cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o.requires
 
 .PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/requires
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/clean:
-	cd /home/soderen/repositories/ConcurrentDataSharer/cmake && $(CMAKE_COMMAND) -P CMakeFiles/ConcurrentDataSharer.dir/cmake_clean.cmake
+	cd /home/martin/repositories/ConcurrentDataSharer/cmake && $(CMAKE_COMMAND) -P CMakeFiles/ConcurrentDataSharer.dir/cmake_clean.cmake
 .PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/clean
 
 cmake/CMakeFiles/ConcurrentDataSharer.dir/depend:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/soderen/repositories/ConcurrentDataSharer /home/soderen/repositories/ConcurrentDataSharer/cmake /home/soderen/repositories/ConcurrentDataSharer /home/soderen/repositories/ConcurrentDataSharer/cmake /home/soderen/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/martin/repositories/ConcurrentDataSharer /home/martin/repositories/ConcurrentDataSharer/cmake /home/martin/repositories/ConcurrentDataSharer /home/martin/repositories/ConcurrentDataSharer/cmake /home/martin/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/depend
 

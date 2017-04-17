@@ -1,4 +1,4 @@
-# Install script for directory: /home/soderen/repositories/ConcurrentDataSharer/cmake
+# Install script for directory: /home/martin/repositories/ConcurrentDataSharer/cmake
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -47,7 +47,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "//usr/local/share/concurrentDataSharer" TYPE SHARED_LIBRARY FILES "/home/soderen/repositories/ConcurrentDataSharer/lib/libConcurrentDataSharer.so")
+file(INSTALL DESTINATION "//usr/local/share/concurrentDataSharer" TYPE SHARED_LIBRARY FILES "/home/martin/repositories/ConcurrentDataSharer/lib/libConcurrentDataSharer.so")
   if(EXISTS "$ENV{DESTDIR}//usr/local/share/concurrentDataSharer/libConcurrentDataSharer.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}//usr/local/share/concurrentDataSharer/libConcurrentDataSharer.so")
     if(CMAKE_INSTALL_DO_STRIP)

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/soderen/repositories/ConcurrentDataSharer
+CMAKE_SOURCE_DIR = /home/martin/repositories/ConcurrentDataSharer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/soderen/repositories/ConcurrentDataSharer
+CMAKE_BINARY_DIR = /home/martin/repositories/ConcurrentDataSharer
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -124,14 +124,14 @@ install/local/fast: install/local
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_progress_start /home/soderen/repositories/ConcurrentDataSharer/CMakeFiles /home/soderen/repositories/ConcurrentDataSharer/test/clienttest/CMakeFiles/progress.marks
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/soderen/repositories/ConcurrentDataSharer/CMakeFiles 0
+	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_progress_start /home/martin/repositories/ConcurrentDataSharer/CMakeFiles /home/martin/repositories/ConcurrentDataSharer/test/clienttest/CMakeFiles/progress.marks
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/martin/repositories/ConcurrentDataSharer/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/clean
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/clean
 .PHONY : clean
 
 # The main clean target
@@ -141,22 +141,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/preinstall
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/preinstall
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 test/clienttest/CMakeFiles/main.dir/rule:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/CMakeFiles/main.dir/rule
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 test/clienttest/CMakeFiles/main.dir/rule
 .PHONY : test/clienttest/CMakeFiles/main.dir/rule
 
 # Convenience name for target.
@@ -166,7 +166,7 @@ main: test/clienttest/CMakeFiles/main.dir/rule
 
 # fast build rule for target.
 main/fast:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/build
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/build
 .PHONY : main/fast
 
 main.o: main.cpp.o
@@ -175,7 +175,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/main.cpp.o
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -184,7 +184,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/main.cpp.i
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -193,7 +193,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/main.cpp.s
+	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -223,6 +223,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

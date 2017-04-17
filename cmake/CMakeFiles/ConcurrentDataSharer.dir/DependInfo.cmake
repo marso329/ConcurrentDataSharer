@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/soderen/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp" "/home/soderen/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o"
-  "/home/soderen/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp" "/home/soderen/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o"
-  "/home/soderen/repositories/ConcurrentDataSharer/src/structures.cpp" "/home/soderen/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o"
+  "/home/martin/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp" "/home/martin/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o"
+  "/home/martin/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp" "/home/martin/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o"
+  "/home/martin/repositories/ConcurrentDataSharer/src/structures.cpp" "/home/martin/repositories/ConcurrentDataSharer/cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
