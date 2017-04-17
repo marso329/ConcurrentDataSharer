@@ -349,7 +349,7 @@ std::istringstream data(std::string(buffer + 32, inbound_data_size));
 	boost::archive::text_iarchive archive(data);
 	QueueElementTCPSend* dataReceived = new QueueElementTCPSend();
 	archive >> dataReceived;
-	std::cout<<"put TCP data on recvQueue"
+	std::cout<<"put TCP data on recvQueue";
 	_recvQueue->Put(dynamic_cast<QueueElementBase*>(dataReceived));
 
 delete buffer;
