@@ -62,6 +62,21 @@ public:
 		ia >> returnData;
 		return returnData;
 	}
+
+	template<typename T>
+	T get(std::string const& client,std::string const& name) {
+		QueueElementTCPSend * toSend = new QueueElementTCPSend(client, name,
+				TCPGETVARIABLE, true);
+		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+		std::string data = toSend->getData();
+		delete toSend;
+		std::istringstream ar(data);
+		boost::archive::text_iarchive ia(ar);
+		T returnData;
+		ia >> returnData;
+		return returnData;
+	}
+
 	std::vector<std::string> getClients();
 	void registerNewClientCallback(CallbackSig func){
 		newClientCallback=func;

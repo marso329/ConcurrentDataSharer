@@ -180,6 +180,31 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 
 		break;
 	}
+	case TCPGETVARIABLE:{
+		auto it =_dataBase.find(data->getDataNoneBlocking());
+		std::string datafromDatabase="";
+		if(it!=_dataBase.end()){
+			datafromDatabase=it->second->getData();
+		}
+
+		QueueElementTCPSend* toSend = new QueueElementTCPSend(
+						data->getRequestor(), datafromDatabase, TCPREPLYGETVARIABLE, false);
+		toSend->setTag(data->getTag());
+		_TCPSendQueue->Put(toSend);
+		delete data;
+		break;
+	}
+
+	case TCPREPLYGETVARIABLE:{
+		auto it = _requests.find(data->getTag());
+		if (it == _requests.end()) {
+			throw std::runtime_error("request not found");
+		}
+		it->second->setData(data->getDataNoneBlocking());
+		_requests.erase(it);
+		delete data;
+		break;
+	}
 	default: {
 		throw std::runtime_error("unknown tcp action");
 	}

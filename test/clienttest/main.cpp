@@ -28,6 +28,8 @@ int main(int argc, char ** argv) {
 			std::cout<<*it<<"has variables:"<<std::endl;
 			for(auto ti=var.begin();ti!=var.end();ti++){
 				std::cout<<*ti<<std::endl;
+				int tempInt=sharer->get<int>(*it,*ti);
+				std::cout<<"variable:"<<*ti<<"has value"<<tempInt<<std::endl;
 			}
 		}
 	}
