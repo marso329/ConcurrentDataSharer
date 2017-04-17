@@ -108,8 +108,10 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 
 void ConcurrentDataSharer::handleQueueElementTCPSend(
 		QueueElementTCPSend* data) {
+	std::cout<<"handleQueueElementTCPSend handling data"<<std::endl;
 	switch (data->getPurpose()) {
 	case TCPSENDVARIABLES: {
+		std::cout<<"TCPSENDVARIABLES"<<std::endl;
 		std::vector<std::string> variables;
 		for (auto it = _dataBase.begin(); it != _dataBase.end(); it++) {
 			variables.push_back(it->first);
@@ -136,6 +138,7 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		break;
 	}
 	case TCPREPLYVARIABLES: {
+		std::cout<<"TCPREPLYVARIABLES"<<std::endl;
 		std::cout << "got variables" << std::endl;
 		auto it = _requests.find(data->getTag());
 		if (it == _requests.end()) {
@@ -148,7 +151,8 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		break;
 	}
 	case TCPPERSONALINTRODUCTION: {
-		std::istringstream stream(data->getData());
+		std::cout<<"TCPPERSONALINTRODUCTION"<<std::endl;
+		std::istringstream stream(data->getDataNoneBlocking());
 		boost::archive::text_iarchive archive(stream);
 		clientData* dataReceived = new clientData();
 		archive >> dataReceived;

@@ -11,8 +11,8 @@ int main(int argc, char ** argv) {
 
 	std::cout<<"My name is : "<<sharer->getMyName()<<" and i want a list of a nother clients variable"<<std::endl;
 
-	usleep(1000000);
-	/**
+	//usleep(100000000);
+
 	while (true) {
 		std::vector<std::string> clients = sharer->getClients();
 		if (clients.size() != 1) {
@@ -31,5 +31,5 @@ int main(int argc, char ** argv) {
 			}
 		}
 	}
-**/
+
 }
