@@ -331,27 +331,31 @@ void ConcurrentDataSharer::TCPRecvSession(
 	std::cout << "TCPRecvSession" << std::endl;
 	std::cout << "avail: " << sock->available() << std::endl;
 	std::size_t bufferSize = sock->available();
-	if (bufferSize == 0) {
-		std::cout << "bufferSize=0" << std::endl;
-		return;
-	}
-	char* buffer = new char[bufferSize];
+
 	char* headerBuffer = new char[32];
 	boost::system::error_code ec;
-	unsigned int packetSize = sock->read_some(
-			boost::asio::buffer(buffer, bufferSize), ec);
-	std::cout << "reveived: " << packetSize << " bytes of data" << std::endl;
+//	unsigned int packetSize = sock->read_some(
+//			boost::asio::buffer(buffer, bufferSize), ec);
+std::size_t dataRead =boost::asio::read(*sock, boost::asio::buffer(headerBuffer, 32));
+if(dataRead!=32){
+	std::cout<<"header read failed";
+}
+
+	std::cout << "reveived: " << dataRead << " bytes of data" << std::endl;
 	if (ec) {
 		throw std::runtime_error("fetch failed");
 	}
-	memcpy(headerBuffer, buffer, 32);
+	//memcpy(headerBuffer, buffer, 32);
 	std::istringstream is(std::string(headerBuffer, 32));
 	std::size_t inbound_data_size = 0;
 	if (!(is >> std::hex >> inbound_data_size)) {
 		throw std::runtime_error("incorrect header");
 	}
+	char* buffer = new char[inbound_data_size];
+	dataRead =boost::asio::read(*sock, boost::asio::buffer(buffer, inbound_data_size));
 
-	std::istringstream data(std::string(buffer + 32, inbound_data_size));
+
+	std::istringstream data(std::string(buffer, inbound_data_size));
 
 	boost::archive::text_iarchive archive(data);
 	QueueElementTCPSend* dataReceived = new QueueElementTCPSend();
@@ -377,6 +381,7 @@ void ConcurrentDataSharer::TCPRecv() {
 	}
 
 }
+
 
 void ConcurrentDataSharer::TCPSend() {
 	//socket_TCP_send = new boost::asio::ip::tcp::socket(io_service_TCP_send);
@@ -442,11 +447,21 @@ void ConcurrentDataSharer::TCPSend() {
 			buffers->push_back(boost::asio::buffer(outbound_data));
 			//buffers.push_back(boost::asio::buffer(eol));
 			//socket_TCP_send->send(buffers);
-			boost::asio::async_write(*socket_TCP_send, *buffers,
+			boost::system::error_code ec;
+
+			std::size_t dataSent= boost::asio::write(*socket_TCP_send,*buffers,ec);
+		std::cout<<"sent: "<<dataSent<<" bytes"<<std::endl;
+		if(ec){
+			std::cout<<"transmission errroer"<<std::endl;
+
+		}
+			//socket_TCP_send->w
+			/**boost::asio::async_write(*socket_TCP_send, *buffers,
 					boost::bind(&ConcurrentDataSharer::handleTCPSendError, this,
 							boost::asio::placeholders::error,
 							boost::asio::placeholders::bytes_transferred,buffers));
-			io_service_send.run_one();
+			**/
+			io_service_send.run();
 			std::cout << "io_service run once returned" << std::endl;
 			if (!operation->getResponsRequired()) {
 				delete data;
@@ -455,8 +470,9 @@ void ConcurrentDataSharer::TCPSend() {
 	}
 }
 
+
 void ConcurrentDataSharer::handleTCPSendError(
-		const boost::system::error_code& error, size_t bytes_recvd,boost::shared_ptr<std::vector<boost::asio::const_buffer>> buffer) {
+		const boost::system::error_code& error, size_t bytes_recvd) {
 	if (error) {
 		throw std::runtime_error("Multicast send failed");
 	}
