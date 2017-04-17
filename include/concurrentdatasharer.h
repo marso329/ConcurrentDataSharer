@@ -107,7 +107,7 @@ private:
 	void handleMultiRecvData(const boost::system::error_code& error,
 			size_t bytes_recvd);
 	void handleMultiSendError(const boost::system::error_code& error, size_t);
-	void handleTCPSendError(const boost::system::error_code& error, size_t);
+	void handleTCPSendError(const boost::system::error_code& error, size_t,boost::shared_ptr<std::vector<boost::asio::const_buffer>>);
 
 //const and initialized at creation
 
