@@ -174,6 +174,19 @@ main/fast:
 	$(MAKE) -f test/clienttest/CMakeFiles/main.dir/build.make test/clienttest/CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+#=============================================================================
+# Target rules for targets named main1
+
+# Build rule for target.
+main1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main1
+.PHONY : main1
+
+# fast build rule for target.
+main1/fast:
+	$(MAKE) -f test/clienttest1/CMakeFiles/main1.dir/build.make test/clienttest1/CMakeFiles/main1.dir/build
+.PHONY : main1/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -187,6 +200,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... ConcurrentDataSharer"
 	@echo "... main"
+	@echo "... main1"
 .PHONY : help
 
 

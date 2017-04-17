@@ -35,6 +35,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/martin/repositories/ConcurrentDataSharer/test/clienttest/cmake_install.cmake")
+  include("/home/martin/repositories/ConcurrentDataSharer/test/clienttest1/cmake_install.cmake")
 
 endif()
 

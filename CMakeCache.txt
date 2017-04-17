@@ -148,6 +148,12 @@ ConcurrentDataSharer_LIB_DEPENDS:STATIC=general;-lboost_serialization;general;-l
 ConcurrentDataSharer_SOURCE_DIR:STATIC=/home/martin/repositories/ConcurrentDataSharer/test
 
 //Value Computed by CMake
+clienttest1_BINARY_DIR:STATIC=/home/martin/repositories/ConcurrentDataSharer/test/clienttest1
+
+//Value Computed by CMake
+clienttest1_SOURCE_DIR:STATIC=/home/martin/repositories/ConcurrentDataSharer/test/clienttest1
+
+//Value Computed by CMake
 clienttest_BINARY_DIR:STATIC=/home/martin/repositories/ConcurrentDataSharer/test/clienttest
 
 //Value Computed by CMake
@@ -232,7 +238,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
 //Path to CMake installation.
 CMAKE_ROOT:INTERNAL=/usr/share/cmake-3.5
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS

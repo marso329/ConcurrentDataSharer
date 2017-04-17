@@ -20,3 +20,9 @@
 /home/martin/repositories/ConcurrentDataSharer/test/clienttest/CMakeFiles/edit_cache.dir
 /home/martin/repositories/ConcurrentDataSharer/test/clienttest/CMakeFiles/install/local.dir
 /home/martin/repositories/ConcurrentDataSharer/test/clienttest/CMakeFiles/rebuild_cache.dir
+/home/martin/repositories/ConcurrentDataSharer/test/clienttest1/CMakeFiles/install.dir
+/home/martin/repositories/ConcurrentDataSharer/test/clienttest1/CMakeFiles/list_install_components.dir
+/home/martin/repositories/ConcurrentDataSharer/test/clienttest1/CMakeFiles/main1.dir
+/home/martin/repositories/ConcurrentDataSharer/test/clienttest1/CMakeFiles/install/local.dir
+/home/martin/repositories/ConcurrentDataSharer/test/clienttest1/CMakeFiles/rebuild_cache.dir
+/home/martin/repositories/ConcurrentDataSharer/test/clienttest1/CMakeFiles/edit_cache.dir

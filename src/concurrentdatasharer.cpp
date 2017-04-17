@@ -143,27 +143,13 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(QueueElementTCPSend* data) 
 		std::cout<<"got reply ";
 		break;
 	}
-	default:{
-		throw std::runtime_error("unknown tcp action");
-	}
-	}
-
-}
-
-void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
-	QueueElementMultiSend* package = dynamic_cast<QueueElementMultiSend*>(data);
-	switch (package->getPurpose()) {
-	case MULTIUNDEFINED: {
-		throw std::runtime_error("undefined multisend package");
-		break;
-	}
-	case MULTIINTRODUCTION: {
-		std::cout << "Node: " << package->getName() << " joined" << std::endl;
-
-		std::istringstream data(package->getData());
-		boost::archive::text_iarchive archive(data);
+	case TCPPERSONALINTRODUCTION:{
+		std::istringstream stream(data->getData());
+		boost::archive::text_iarchive archive(stream);
 		clientData* dataReceived = new clientData();
 		archive >> dataReceived;
+		std::cout << "Node: " << dataReceived->getName() << " sent an personal introduction" << std::endl;
+
 		std::cout << "he has ipadresses:" << std::endl;
 		std::vector<std::string> adress = dataReceived->getIPV4();
 		for (auto it = adress.begin(); it != adress.end(); it++) {
@@ -182,6 +168,66 @@ void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 			std::cout << "calling callack" << std::endl;
 			newClientCallback();
 		}
+
+
+
+		break;
+	}
+	default:{
+		throw std::runtime_error("unknown tcp action");
+	}
+	}
+
+}
+
+void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
+	QueueElementMultiSend* package = dynamic_cast<QueueElementMultiSend*>(data);
+	switch (package->getPurpose()) {
+	case MULTIUNDEFINED: {
+		throw std::runtime_error("undefined multisend package");
+		break;
+	}
+	case MULTIINTRODUCTION: {
+
+
+		std::istringstream stream(package->getData());
+		boost::archive::text_iarchive archive(stream);
+		clientData* dataReceived = new clientData();
+		archive >> dataReceived;
+
+		if(dataReceived->getName()==getMyName()){
+			std::cout<<"got multi introduction from myself"<<std::endl;
+			delete dataReceived;
+			break;
+		}
+		std::cout << "Node: " << dataReceived->getName() << " joined" << std::endl;
+		std::cout << "he has ipadresses:" << std::endl;
+		std::vector<std::string> adress = dataReceived->getIPV4();
+		for (auto it = adress.begin(); it != adress.end(); it++) {
+			std::cout << *it << std::endl;
+		}
+		bool change = false;
+		_clientLock->lock();
+		if (_clients.find(dataReceived->getName()) == _clients.end()) {
+			_clients[dataReceived->getName()] = dataReceived;
+			change = true;
+		}
+		_clientLock->unlock();
+		if (newClientCallback != NULL && change) {
+			std::cout << "calling callack" << std::endl;
+			newClientCallback();
+		}
+		std::ostringstream ss;
+		boost::archive::text_oarchive ar(ss);
+		ar << _myself;
+		std::string outbound_data = ss.str();
+		QueueElementTCPSend* toSend = new QueueElementTCPSend(dataReceived->getName(),
+				outbound_data, TCPPERSONALINTRODUCTION,false);
+		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+if(!change){
+	delete dataReceived;
+}
+
 		break;
 	}
 	default: {
