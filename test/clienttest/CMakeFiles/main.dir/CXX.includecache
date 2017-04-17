@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/martin/repositories/ConcurrentDataSharer/test/clienttest/main.cpp
+/home/soderen/repositories/ConcurrentDataSharer/test/clienttest/main.cpp
 concurrentdatasharer.h
-/home/martin/repositories/ConcurrentDataSharer/test/clienttest/concurrentdatasharer.h
+/home/soderen/repositories/ConcurrentDataSharer/test/clienttest/concurrentdatasharer.h
 iostream
 -
 unistd.h

@@ -8,22 +8,7 @@ void newClient() {
 
 int main(int argc, char ** argv) {
 	ConcurrentDataSharer* sharer = new ConcurrentDataSharer("test");
-	while (true) {
-		std::vector<std::string> clients = sharer->getClients();
-		if (clients.size() != 1) {
-			break;
-		}
-		usleep(1000);
-	}
-	std::cout<<"NEW client"<<std::endl;
-	std::vector<std::string> clients = sharer->getClients();
-	for (auto it = clients.begin(); it != clients.end(); it++) {
-		if (*it != sharer->getMyName()) {
-			std::vector < std::string > var= sharer->getClientVariables(*it);
-			std::cout<<*it<<"has variables:"<<std::endl;
-			for(auto ti=var.begin();ti!=var.end();ti++){
-				std::cout<<*ti<<std::endl;
-			}
-		}
-	}
+	sharer->set<int>("data",43);
+	sharer->set<int>("data1",42);
+	usleep(100000000);
 }

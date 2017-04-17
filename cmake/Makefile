@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/martin/repositories/ConcurrentDataSharer
+CMAKE_SOURCE_DIR = /home/soderen/repositories/ConcurrentDataSharer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/martin/repositories/ConcurrentDataSharer
+CMAKE_BINARY_DIR = /home/soderen/repositories/ConcurrentDataSharer
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -78,17 +78,6 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: install/local
-
-.PHONY : install/local/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -99,6 +88,28 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+
+.PHONY : install/strip/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: install/local
+
+.PHONY : install/local/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -113,14 +124,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_progress_start /home/martin/repositories/ConcurrentDataSharer/CMakeFiles /home/martin/repositories/ConcurrentDataSharer/cmake/CMakeFiles/progress.marks
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/martin/repositories/ConcurrentDataSharer/CMakeFiles 0
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -E cmake_progress_start /home/soderen/repositories/ConcurrentDataSharer/CMakeFiles /home/soderen/repositories/ConcurrentDataSharer/cmake/CMakeFiles/progress.marks
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/soderen/repositories/ConcurrentDataSharer/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/clean
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/clean
 .PHONY : clean
 
 # The main clean target
@@ -130,22 +141,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/preinstall
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/preinstall
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 cmake/CMakeFiles/ConcurrentDataSharer.dir/rule:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/CMakeFiles/ConcurrentDataSharer.dir/rule
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/CMakeFiles/ConcurrentDataSharer.dir/rule
 .PHONY : cmake/CMakeFiles/ConcurrentDataSharer.dir/rule
 
 # Convenience name for target.
@@ -155,13 +166,8 @@ ConcurrentDataSharer: cmake/CMakeFiles/ConcurrentDataSharer.dir/rule
 
 # fast build rule for target.
 ConcurrentDataSharer/fast:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/build
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/build
 .PHONY : ConcurrentDataSharer/fast
-
-# Manual pre-install relink rule for target.
-ConcurrentDataSharer/preinstall:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f CMakeFiles/Makefile2 cmake/CMakeFiles/ConcurrentDataSharer.dir/preinstall
-.PHONY : ConcurrentDataSharer/preinstall
 
 __/src/BlockingQueue.o: __/src/BlockingQueue.cpp.o
 
@@ -169,7 +175,7 @@ __/src/BlockingQueue.o: __/src/BlockingQueue.cpp.o
 
 # target to build an object file
 __/src/BlockingQueue.cpp.o:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.o
 .PHONY : __/src/BlockingQueue.cpp.o
 
 __/src/BlockingQueue.i: __/src/BlockingQueue.cpp.i
@@ -178,7 +184,7 @@ __/src/BlockingQueue.i: __/src/BlockingQueue.cpp.i
 
 # target to preprocess a source file
 __/src/BlockingQueue.cpp.i:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.i
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.i
 .PHONY : __/src/BlockingQueue.cpp.i
 
 __/src/BlockingQueue.s: __/src/BlockingQueue.cpp.s
@@ -187,7 +193,7 @@ __/src/BlockingQueue.s: __/src/BlockingQueue.cpp.s
 
 # target to generate assembly for a file
 __/src/BlockingQueue.cpp.s:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.s
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/BlockingQueue.cpp.s
 .PHONY : __/src/BlockingQueue.cpp.s
 
 __/src/concurrentdatasharer.o: __/src/concurrentdatasharer.cpp.o
@@ -196,7 +202,7 @@ __/src/concurrentdatasharer.o: __/src/concurrentdatasharer.cpp.o
 
 # target to build an object file
 __/src/concurrentdatasharer.cpp.o:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.o
 .PHONY : __/src/concurrentdatasharer.cpp.o
 
 __/src/concurrentdatasharer.i: __/src/concurrentdatasharer.cpp.i
@@ -205,7 +211,7 @@ __/src/concurrentdatasharer.i: __/src/concurrentdatasharer.cpp.i
 
 # target to preprocess a source file
 __/src/concurrentdatasharer.cpp.i:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.i
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.i
 .PHONY : __/src/concurrentdatasharer.cpp.i
 
 __/src/concurrentdatasharer.s: __/src/concurrentdatasharer.cpp.s
@@ -214,7 +220,7 @@ __/src/concurrentdatasharer.s: __/src/concurrentdatasharer.cpp.s
 
 # target to generate assembly for a file
 __/src/concurrentdatasharer.cpp.s:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.s
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/concurrentdatasharer.cpp.s
 .PHONY : __/src/concurrentdatasharer.cpp.s
 
 __/src/structures.o: __/src/structures.cpp.o
@@ -223,7 +229,7 @@ __/src/structures.o: __/src/structures.cpp.o
 
 # target to build an object file
 __/src/structures.cpp.o:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.o
 .PHONY : __/src/structures.cpp.o
 
 __/src/structures.i: __/src/structures.cpp.i
@@ -232,7 +238,7 @@ __/src/structures.i: __/src/structures.cpp.i
 
 # target to preprocess a source file
 __/src/structures.cpp.i:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.i
 .PHONY : __/src/structures.cpp.i
 
 __/src/structures.s: __/src/structures.cpp.s
@@ -241,7 +247,7 @@ __/src/structures.s: __/src/structures.cpp.s
 
 # target to generate assembly for a file
 __/src/structures.cpp.s:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(MAKE) -f cmake/CMakeFiles/ConcurrentDataSharer.dir/build.make cmake/CMakeFiles/ConcurrentDataSharer.dir/__/src/structures.cpp.s
 .PHONY : __/src/structures.cpp.s
 
 # Help Target
@@ -252,9 +258,10 @@ help:
 	@echo "... depend"
 	@echo "... install"
 	@echo "... list_install_components"
-	@echo "... ConcurrentDataSharer"
-	@echo "... install/local"
 	@echo "... rebuild_cache"
+	@echo "... ConcurrentDataSharer"
+	@echo "... install/strip"
+	@echo "... install/local"
 	@echo "... edit_cache"
 	@echo "... __/src/BlockingQueue.o"
 	@echo "... __/src/BlockingQueue.i"
@@ -276,6 +283,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/martin/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/soderen/repositories/ConcurrentDataSharer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

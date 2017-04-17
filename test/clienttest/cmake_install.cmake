@@ -1,4 +1,4 @@
-# Install script for directory: /home/martin/repositories/ConcurrentDataSharer/test/clienttest
+# Install script for directory: /home/soderen/repositories/ConcurrentDataSharer/test/clienttest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

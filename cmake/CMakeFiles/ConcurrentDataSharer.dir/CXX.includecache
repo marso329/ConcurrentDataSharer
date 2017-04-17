@@ -6,17 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/home/martin/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp
+/home/soderen/repositories/ConcurrentDataSharer/src/BlockingQueue.cpp
 BlockingQueue.h
-/home/martin/repositories/ConcurrentDataSharer/src/BlockingQueue.h
+/home/soderen/repositories/ConcurrentDataSharer/src/BlockingQueue.h
 
-/home/martin/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp
+/home/soderen/repositories/ConcurrentDataSharer/src/concurrentdatasharer.cpp
 concurrentdatasharer.h
 -
 
-/home/martin/repositories/ConcurrentDataSharer/src/structures.cpp
+/home/soderen/repositories/ConcurrentDataSharer/src/structures.cpp
 structures.h
-/home/martin/repositories/ConcurrentDataSharer/src/structures.h
+/home/soderen/repositories/ConcurrentDataSharer/src/structures.h
 
 cmake/../include/BlockingQueue.h
 iostream
