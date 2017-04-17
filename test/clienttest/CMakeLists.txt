@@ -3,6 +3,7 @@ project (clienttest)
 set ( PROJECT_LINK_LIBS ConcurrentDataSharer.so )
 link_directories( ../../lib )
 include_directories(../../include)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../bin)
 set (CMAKE_CXX_FLAGS "-std=c++11")
 add_executable(main main.cpp)
