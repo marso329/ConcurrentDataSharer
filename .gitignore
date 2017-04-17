@@ -28,3 +28,6 @@ build/
 
 /doxygen_docs
 /doxygen.tag
+/doc/latex
+/doc/docbook
+/doc/html

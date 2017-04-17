@@ -1,7 +1,0 @@
-<map id="QueueElementBase" name="QueueElementBase">
-<area shape="rect" id="node2" href="$classQueueElementCallback.html" title="QueueElementCallback" alt="" coords="196,5,355,32"/>
-<area shape="rect" id="node3" href="$classQueueElementGet.html" title="QueueElementGet" alt="" coords="211,56,340,83"/>
-<area shape="rect" id="node4" href="$classQueueElementMultiSend.html" title="QueueElementMultiSend" alt="" coords="192,107,359,133"/>
-<area shape="rect" id="node5" href="$classQueueElementSet.html" title="QueueElementSet" alt="" coords="211,157,339,184"/>
-<area shape="rect" id="node6" href="$classQueueElementTCPSend.html" title="QueueElementTCPSend" alt="" coords="193,208,358,235"/>
-</map>
