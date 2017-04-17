@@ -347,6 +347,7 @@ void ConcurrentDataSharer::TCPSend() {
 		_clientLock->lock();
 		auto it = _clients.find(operation->getName());
 		if (it == _clients.end()) {
+			std::cout<<"could not find client"<<std::endl;
 			delete data;
 			_clientLock->unlock();
 			continue;
@@ -354,6 +355,7 @@ void ConcurrentDataSharer::TCPSend() {
 		std::vector<std::string> clientadresses = (*it).second->getIPV4();
 		_clientLock->unlock();
 		if (clientadresses.size() == 0) {
+			std::cout<<"found client but no adress associated"<<std::endl;
 			delete data;
 			continue;
 		}
