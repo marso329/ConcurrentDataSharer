@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="structures_8h">
+    <title>structures.h File Reference</title>
+    <programlisting>#include &lt;sstream&gt;</programlisting>
+    <programlisting>#include &lt;string&gt;</programlisting>
+    <programlisting>#include &lt;condition_variable&gt;</programlisting>
+    <programlisting>#include &lt;mutex&gt;</programlisting>
+    <programlisting>#include &lt;boost/archive/text_oarchive.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/archive/text_iarchive.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/base_object.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/utility.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/list.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/assume_abstract.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/string.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/vector.hpp&gt;</programlisting>
+<para>Include dependency diagram for structures.h</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="structures_8h__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Included by dependency diagram for structures.h</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="structures_8h__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title> Classes </title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classQueueElementBase">QueueElementBase</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classQueueElementSet">QueueElementSet</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classQueueElementMultiSend">QueueElementMultiSend</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classQueueElementTCPSend">QueueElementTCPSend</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classQueueElementGet">QueueElementGet</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classQueueElementCallback">QueueElementCallback</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classDataBaseElement">DataBaseElement</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classclientData">clientData</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Enumerations</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                            <para><literallayout>enum <link linkend="structures_8h_1a841e32f5215b868485600b9ad35b56db">MultiSend</link> {
+<link linkend="structures_8h_1a841e32f5215b868485600b9ad35b56dba06f8125a0e9d7c91b10defd575182e0a">MULTIUNDEFINED</link>,
+<link linkend="structures_8h_1a841e32f5215b868485600b9ad35b56dba4bda2e256b7ed45a93a886b6bfcc9fca">MULTIINTRODUCTION</link>
+}</literallayout>
+</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                            <para><literallayout>enum <link linkend="structures_8h_1a2b9ec195854ea6b6087f2169006ab552">TCPSend</link> {
+<link linkend="structures_8h_1a2b9ec195854ea6b6087f2169006ab552a866dbe2bb9a44418c634e90a5be0dd56">TCPUNDEFINED</link>,
+<link linkend="structures_8h_1a2b9ec195854ea6b6087f2169006ab552ade7dbede15b57693719f9be2e74b0dd1">TCPSENDVARIABLES</link>,
+<link linkend="structures_8h_1a2b9ec195854ea6b6087f2169006ab552a78020419038589204369dc9513c2c0c3">TCPREPLYVARIABLES</link>,
+<link linkend="structures_8h_1a2b9ec195854ea6b6087f2169006ab552a289f313d4bf950c954e369215f2cec59">TCPPERSONALINTRODUCTION</link>,
+<link linkend="structures_8h_1a2b9ec195854ea6b6087f2169006ab552a9da706b3f688eb31bcfbf1f88f691dca">TCPGETVARIABLE</link>,
+<link linkend="structures_8h_1a2b9ec195854ea6b6087f2169006ab552a1d8c69199ed8c72a9b7e7787d5e270d7">TCPREPLYGETVARIABLE</link>
+}</literallayout>
+</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Typedefs</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                            <para>typedef void(*  <link linkend="structures_8h_1aa778fdc943eba54c73150dbd0d3a5c4c">CallbackSig</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+    <simplesect>
+        <title>Detailed Description</title>
+    <para>Definition in file /home/martin/repositories/ConcurrentDataSharer/include/structures.h</para>
+    </simplesect>
+</section>

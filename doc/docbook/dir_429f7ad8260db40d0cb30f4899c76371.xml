@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dir_429f7ad8260db40d0cb30f4899c76371">
+    <title>CMakeFiles/3.5.1/CompilerIdC Directory Reference</title>
+<para>Directory dependency diagram for CMakeFiles/3.5.1/CompilerIdC</para>
+<para>
+    <figure>
+        <title>Directory Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="dir_429f7ad8260db40d0cb30f4899c76371_dep.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <simplesect>
+            <title> File </title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>file <link linkend="doc_2CMakeFiles_23_85_81_2CompilerIdC_2CMakeCCompilerId_8c">CMakeCCompilerId.c</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </simplesect>
+    <simplesect>
+        <title>Detailed Description</title>
+    <para>Directory location is /home/martin/repositories/ConcurrentDataSharer/doc/CMakeFiles/3.5.1/CompilerIdC/</para>
+    </simplesect>
+</section>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="concurrentdatasharer_8h">
+    <title>concurrentdatasharer.h File Reference</title>
+    <programlisting>#include &lt;string&gt;</programlisting>
+    <programlisting>#include &lt;sstream&gt;</programlisting>
+    <programlisting>#include &lt;cstddef&gt;</programlisting>
+    <programlisting>#include &lt;iomanip&gt;</programlisting>
+    <programlisting>#include &lt;iostream&gt;</programlisting>
+    <programlisting>#include &lt;fstream&gt;</programlisting>
+    <programlisting>#include &lt;stdlib.h&gt;</programlisting>
+    <programlisting>#include &lt;time.h&gt;</programlisting>
+    <programlisting>#include &lt;stdio.h&gt;</programlisting>
+    <programlisting>#include &lt;sys/types.h&gt;</programlisting>
+    <programlisting>#include &lt;ifaddrs.h&gt;</programlisting>
+    <programlisting>#include &lt;netinet/in.h&gt;</programlisting>
+    <programlisting>#include &lt;string.h&gt;</programlisting>
+    <programlisting>#include &lt;arpa/inet.h&gt;</programlisting>
+    <programlisting>#include &lt;mutex&gt;</programlisting>
+    <programlisting>#include &lt;unordered_map&gt;</programlisting>
+    <programlisting>#include &lt;boost/archive/tmpdir.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/archive/text_iarchive.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/archive/text_oarchive.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/base_object.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/utility.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/list.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/serialization/assume_abstract.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/thread.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/bind.hpp&gt;</programlisting>
+    <programlisting>#include &lt;boost/asio.hpp&gt;</programlisting>
+    <programlisting>#include &quot;boost/date_time/posix_time/posix_time_types.hpp&quot;</programlisting>
+    <programlisting>#include &quot;structures.h&quot;</programlisting>
+    <programlisting>#include &quot;BlockingQueue.h&quot;</programlisting>
+<para>Include dependency diagram for concurrentdatasharer.h</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="concurrentdatasharer_8h__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Included by dependency diagram for concurrentdatasharer.h</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="concurrentdatasharer_8h__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title> Classes </title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>struct <link linkend="classConcurrentDataSharer">ConcurrentDataSharer</link></para>
+<para><emphasis>ConcurrentDataSharer* sharer = new ConcurrentDataSharer(&quot;test&quot;);
+    sharer-&gt;set&lt;int&gt;(&quot;data&quot;,43);
+    sharer-&gt;set&lt;int&gt;(&quot;data1&quot;,42);.</emphasis></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+    <simplesect>
+        <title>Detailed Description</title>
+    <para>Definition in file /home/martin/repositories/ConcurrentDataSharer/include/concurrentdatasharer.h</para>
+    </simplesect>
+</section>

@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="CMakeCache_8txt">
+    <title>CMakeCache.txt File Reference</title>
+<para>Include dependency diagram for CMakeCache.txt</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="CMakeCache_8txt__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Included by dependency diagram for CMakeCache.txt</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="CMakeCache_8txt__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title>Variables</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>CMAKE_AR <link linkend="CMakeCache_8txt_1a2b96b3598268f62908e4995dd2463817">__pad0__</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="CMakeCache_8txt_1a6a4f8361fca43030c1150d971e737b70">lboost_serialization</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="CMakeCache_8txt_1ad797829e3284fd15f2780269ce9bb6dc">general</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="CMakeCache_8txt_1a07f56b1af77e2a83145a884fcd45cb84">lboost_thread</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="CMakeCache_8txt_1ac1e4928bc1d3c5af824d63073b19b386">lboost_system</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+    <simplesect>
+        <title>Detailed Description</title>
+    <para>Definition in file /home/martin/repositories/ConcurrentDataSharer/CMakeCache.txt</para>
+    </simplesect>
+</section>

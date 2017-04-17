@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="classQueueElementGet">
+<title>QueueElementGet class Reference</title>
+<para>Inheritance diagram for QueueElementGet</para>
+<para>
+    <figure>
+        <title>Inheritance graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementGet__inherit__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Collaboration diagram for QueueElementGet</para>
+<para>
+    <figure>
+        <title>Collaboration graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementGet__coll__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title>Private Attributes</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::condition_variable cv</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>bool ready</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::mutex m</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementGet_1a45a2f0b71296d26da6934accf0b2dd16">QueueElementGet</link> (
+std::string const &amp; )</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classQueueElementGet_1a6a0d5bc87f2f06ec8f31ca4f1ef249a1">getData</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classQueueElementGet_1aefa414c7a54bf6db99e201b887710061">setData</link> (
+std::string const &amp; )</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementGet_1ac7730a1b0372e93c38eff07fbb4ce008">~QueueElementGet</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Member Data Documentation</title>
+        </section>
+            <section xml:id="classQueueElementGet_1a45a2f0b71296d26da6934accf0b2dd16">
+                <title>QueueElementGet::QueueElementGet (std::string const &amp;)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementGet_1a6a0d5bc87f2f06ec8f31ca4f1ef249a1">
+                <title>std::string QueueElementGet::getData ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementGet_1aefa414c7a54bf6db99e201b887710061">
+                <title>void QueueElementGet::setData (std::string const &amp;)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementGet_1ac7730a1b0372e93c38eff07fbb4ce008">
+                <title>QueueElementGet::~QueueElementGet ()</title> <emphasis></emphasis>
+                
+            </section>
+</section>

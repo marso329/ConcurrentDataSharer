@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="classQueueElementMultiSend">
+<title>QueueElementMultiSend class Reference</title>
+<para>Inheritance diagram for QueueElementMultiSend</para>
+<para>
+    <figure>
+        <title>Inheritance graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementMultiSend__inherit__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Collaboration diagram for QueueElementMultiSend</para>
+<para>
+    <figure>
+        <title>Collaboration graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementMultiSend__coll__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Private Attributes</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>MultiSend _purpose</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementMultiSend_1a07b95e3ae8badfb17d67f8e0714c3667">QueueElementMultiSend</link> (
+std::string const &amp; , std::string const &amp; , MultiSend )</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementMultiSend_1a1f0966dba07e5105003b88b8fd28087b">QueueElementMultiSend</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>MultiSend <link linkend="classQueueElementMultiSend_1a2318835ba88e5020022365640a50281b">getPurpose</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementMultiSend_1aadd59b2f47f1b80aaeff52d832befabf">~QueueElementMultiSend</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classQueueElementMultiSend_1a4331ae4ff1c061ce3017d7fc4f56eddd">serialize</link> (
+Archive &amp; ar, const unsigned int version)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Member Data Documentation</title>
+        </section>
+            <section xml:id="classQueueElementMultiSend_1a07b95e3ae8badfb17d67f8e0714c3667">
+                <title>QueueElementMultiSend::QueueElementMultiSend (std::string const &amp;, std::string const &amp;, MultiSend)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementMultiSend_1a1f0966dba07e5105003b88b8fd28087b">
+                <title>QueueElementMultiSend::QueueElementMultiSend ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementMultiSend_1a2318835ba88e5020022365640a50281b">
+                <title>MultiSend QueueElementMultiSend::getPurpose ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementMultiSend_1aadd59b2f47f1b80aaeff52d832befabf">
+                <title>QueueElementMultiSend::~QueueElementMultiSend ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementMultiSend_1a4331ae4ff1c061ce3017d7fc4f56eddd">
+                <title>void QueueElementMultiSend::serialize (Archive &amp;ar, const unsigned int version)</title> <emphasis></emphasis>
+                
+            </section>
+</section>

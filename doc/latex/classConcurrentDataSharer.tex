@@ -1,0 +1,244 @@
+\hypertarget{classConcurrentDataSharer}{}\section{Concurrent\+Data\+Sharer Class Reference}
+\label{classConcurrentDataSharer}\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+
+
+Concurrent\+Data\+Sharer$\ast$ sharer = new \hyperlink{classConcurrentDataSharer}{Concurrent\+Data\+Sharer}(\char`\"{}test\char`\"{}); sharer-\/$>$set$<$int$>$(\char`\"{}data\char`\"{},43); sharer-\/$>$set$<$int$>$(\char`\"{}data1\char`\"{},42);.  
+
+
+
+
+{\ttfamily \#include $<$concurrentdatasharer.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classConcurrentDataSharer_a31adaa38a46a75059bc117aa3b889ead}{Concurrent\+Data\+Sharer} (std\+::string const \&groupname, std\+::string const \&multicastadress=\char`\"{}239.\+255.\+0.\+1\char`\"{}, std\+::string const \&listenadress=\char`\"{}0.\+0.\+0.\+0\char`\"{}, const short multicastport=30001)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classConcurrentDataSharer_abfb5ed7099ae718277bdbfeef362c8c9}{$\sim$\+Concurrent\+Data\+Sharer} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{classConcurrentDataSharer_a61da465e07a98d3b35d5f646d6ebaa33}{set} (std\+::string const \&name, T data)
+\begin{DoxyCompactList}\small\item\em Set a local variable, creates it if it does not exists. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\T \hyperlink{classConcurrentDataSharer_ab843e7ba2687921eee926d5ec3251ec2}{get} (std\+::string const \&name)
+\begin{DoxyCompactList}\small\item\em Get a local variable. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\T \hyperlink{classConcurrentDataSharer_a00a171243dde5f2b957f8e338d2fb4cd}{get} (std\+::string const \&client, std\+::string const \&name)
+\begin{DoxyCompactList}\small\item\em Get a variable from another client. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \hyperlink{classConcurrentDataSharer_a10ac5344381b73c61368634efcff7350}{get\+Clients} ()
+\begin{DoxyCompactList}\small\item\em to get all connected clients \end{DoxyCompactList}\item 
+void \hyperlink{classConcurrentDataSharer_af49ca1b3094d8e5991032aff3e26a39a}{register\+New\+Client\+Callback} (Callback\+Sig func)
+\begin{DoxyCompactList}\small\item\em connects a callback when a new clients connects \end{DoxyCompactList}\item 
+void \hyperlink{classConcurrentDataSharer_ab1f7d71cb857152ae4c9f5559a3ad32e}{register\+Callback} (std\+::string const \&name, Callback\+Sig func)
+\begin{DoxyCompactList}\small\item\em connects a callback if a local variable changes \end{DoxyCompactList}\item 
+std\+::string \hyperlink{classConcurrentDataSharer_a7bdc1d74f0d94a9855121f0ddb496bde}{get\+My\+Name} ()
+\begin{DoxyCompactList}\small\item\em return the name of this client \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \hyperlink{classConcurrentDataSharer_aba0ce899cc2994d381ab59fb359b8a25}{get\+Client\+Variables} (std\+::string const \&client)
+\begin{DoxyCompactList}\small\item\em get a list with the names of a clients variables \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Concurrent\+Data\+Sharer$\ast$ sharer = new \hyperlink{classConcurrentDataSharer}{Concurrent\+Data\+Sharer}(\char`\"{}test\char`\"{}); sharer-\/$>$set$<$int$>$(\char`\"{}data\char`\"{},43); sharer-\/$>$set$<$int$>$(\char`\"{}data1\char`\"{},42);. 
+
+This is the main class for the \hyperlink{classConcurrentDataSharer}{Concurrent\+Data\+Sharer}
+
+\begin{DoxyNote}{Note}
+This is the shit
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+Martin Soderen
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2017/04/147 00\+:00\+:00
+\end{DoxyDate}
+Contact\+: \href{mailto:martin.soderen@gmail.com}{\tt martin.\+soderen@gmail.\+com}
+
+Created on\+: Fri Apr 14 00\+:00\+:00 2017
+
+\begin{DoxyParagraph}{Id}
+
+\end{DoxyParagraph}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{Concurrent\+Data\+Sharer(std\+::string const \&groupname, std\+::string const \&multicastadress=""239.\+255.\+0.\+1"", std\+::string const \&listenadress=""0.\+0.\+0.\+0"", const short multicastport=30001)}{ConcurrentDataSharer(std::string const &groupname, std::string const &multicastadress="239.255.0.1", std::string const &listenadress="0.0.0.0", const short multicastport=30001)}}]{\setlength{\rightskip}{0pt plus 5cm}Concurrent\+Data\+Sharer\+::\+Concurrent\+Data\+Sharer (
+\begin{DoxyParamCaption}
+\item[{std\+::string const \&}]{groupname, }
+\item[{std\+::string const \&}]{multicastadress = {\ttfamily \char`\"{}239.255.0.1\char`\"{}}, }
+\item[{std\+::string const \&}]{listenadress = {\ttfamily \char`\"{}0.0.0.0\char`\"{}}, }
+\item[{const short}]{multicastport = {\ttfamily 30001}}
+\end{DoxyParamCaption}
+)}\hypertarget{classConcurrentDataSharer_a31adaa38a46a75059bc117aa3b889ead}{}\label{classConcurrentDataSharer_a31adaa38a46a75059bc117aa3b889ead}
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em groupname} & the name for the Concurrent\+Datasharer group to share data with \\
+\hline
+{\em multicastadress} & the adress for U\+DP broadcasting, default is 239.\+255.\+0.\+1 \\
+\hline
+{\em listenadress} & the adress for U\+DP broadcasting listening, default is 0.\+0.\+0.\+0 \\
+\hline
+{\em multicastport} & the port for U\+DP broadcasting, default is 30001 \\
+\hline
+\end{DoxyParams}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!````~Concurrent\+Data\+Sharer@{$\sim$\+Concurrent\+Data\+Sharer}}
+\index{````~Concurrent\+Data\+Sharer@{$\sim$\+Concurrent\+Data\+Sharer}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{$\sim$\+Concurrent\+Data\+Sharer()}{~ConcurrentDataSharer()}}]{\setlength{\rightskip}{0pt plus 5cm}Concurrent\+Data\+Sharer\+::$\sim$\+Concurrent\+Data\+Sharer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classConcurrentDataSharer_abfb5ed7099ae718277bdbfeef362c8c9}{}\label{classConcurrentDataSharer_abfb5ed7099ae718277bdbfeef362c8c9}
+
+
+Destructor. 
+
+Destructs objects 
+
+\subsection{Member Function Documentation}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!get@{get}}
+\index{get@{get}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{get(std\+::string const \&name)}{get(std::string const &name)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ T Concurrent\+Data\+Sharer\+::get (
+\begin{DoxyParamCaption}
+\item[{std\+::string const \&}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classConcurrentDataSharer_ab843e7ba2687921eee926d5ec3251ec2}{}\label{classConcurrentDataSharer_ab843e7ba2687921eee926d5ec3251ec2}
+
+
+Get a local variable. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & the name of the variable \\
+\hline
+\end{DoxyParams}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!get@{get}}
+\index{get@{get}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{get(std\+::string const \&client, std\+::string const \&name)}{get(std::string const &client, std::string const &name)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ T Concurrent\+Data\+Sharer\+::get (
+\begin{DoxyParamCaption}
+\item[{std\+::string const \&}]{client, }
+\item[{std\+::string const \&}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classConcurrentDataSharer_a00a171243dde5f2b957f8e338d2fb4cd}{}\label{classConcurrentDataSharer_a00a171243dde5f2b957f8e338d2fb4cd}
+
+
+Get a variable from another client. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em client} & the name of the client \\
+\hline
+{\em name} & the name of the variable \\
+\hline
+\end{DoxyParams}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!get\+Clients@{get\+Clients}}
+\index{get\+Clients@{get\+Clients}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{get\+Clients()}{getClients()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ std\+::string $>$ Concurrent\+Data\+Sharer\+::get\+Clients (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classConcurrentDataSharer_a10ac5344381b73c61368634efcff7350}{}\label{classConcurrentDataSharer_a10ac5344381b73c61368634efcff7350}
+
+
+to get all connected clients 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$std\+::string$>$ with the names of all the clients 
+\end{DoxyReturn}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!get\+Client\+Variables@{get\+Client\+Variables}}
+\index{get\+Client\+Variables@{get\+Client\+Variables}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{get\+Client\+Variables(std\+::string const \&client)}{getClientVariables(std::string const &client)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ std\+::string $>$ Concurrent\+Data\+Sharer\+::get\+Client\+Variables (
+\begin{DoxyParamCaption}
+\item[{std\+::string const \&}]{client}
+\end{DoxyParamCaption}
+)}\hypertarget{classConcurrentDataSharer_aba0ce899cc2994d381ab59fb359b8a25}{}\label{classConcurrentDataSharer_aba0ce899cc2994d381ab59fb359b8a25}
+
+
+get a list with the names of a clients variables 
+
+
+\begin{DoxyParams}{Parameters}
+{\em client} & the name of the client \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a list with the names of a clients variables 
+\end{DoxyReturn}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!get\+My\+Name@{get\+My\+Name}}
+\index{get\+My\+Name@{get\+My\+Name}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{get\+My\+Name()}{getMyName()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Concurrent\+Data\+Sharer\+::get\+My\+Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classConcurrentDataSharer_a7bdc1d74f0d94a9855121f0ddb496bde}{}\label{classConcurrentDataSharer_a7bdc1d74f0d94a9855121f0ddb496bde}
+
+
+return the name of this client 
+
+\begin{DoxyReturn}{Returns}
+the name of this client 
+\end{DoxyReturn}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!register\+Callback@{register\+Callback}}
+\index{register\+Callback@{register\+Callback}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{register\+Callback(std\+::string const \&name, Callback\+Sig func)}{registerCallback(std::string const &name, CallbackSig func)}}]{\setlength{\rightskip}{0pt plus 5cm}void Concurrent\+Data\+Sharer\+::register\+Callback (
+\begin{DoxyParamCaption}
+\item[{std\+::string const \&}]{name, }
+\item[{Callback\+Sig}]{func}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classConcurrentDataSharer_ab1f7d71cb857152ae4c9f5559a3ad32e}{}\label{classConcurrentDataSharer_ab1f7d71cb857152ae4c9f5559a3ad32e}
+
+
+connects a callback if a local variable changes 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & the name of the variable \\
+\hline
+{\em func} & the function to connect with change \\
+\hline
+\end{DoxyParams}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!register\+New\+Client\+Callback@{register\+New\+Client\+Callback}}
+\index{register\+New\+Client\+Callback@{register\+New\+Client\+Callback}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{register\+New\+Client\+Callback(\+Callback\+Sig func)}{registerNewClientCallback(CallbackSig func)}}]{\setlength{\rightskip}{0pt plus 5cm}void Concurrent\+Data\+Sharer\+::register\+New\+Client\+Callback (
+\begin{DoxyParamCaption}
+\item[{Callback\+Sig}]{func}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classConcurrentDataSharer_af49ca1b3094d8e5991032aff3e26a39a}{}\label{classConcurrentDataSharer_af49ca1b3094d8e5991032aff3e26a39a}
+
+
+connects a callback when a new clients connects 
+
+
+\begin{DoxyParams}{Parameters}
+{\em func} & the function to connect \\
+\hline
+\end{DoxyParams}
+\index{Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}!set@{set}}
+\index{set@{set}!Concurrent\+Data\+Sharer@{Concurrent\+Data\+Sharer}}
+\subsubsection[{\texorpdfstring{set(std\+::string const \&name, T data)}{set(std::string const &name, T data)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void Concurrent\+Data\+Sharer\+::set (
+\begin{DoxyParamCaption}
+\item[{std\+::string const \&}]{name, }
+\item[{T}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classConcurrentDataSharer_a61da465e07a98d3b35d5f646d6ebaa33}{}\label{classConcurrentDataSharer_a61da465e07a98d3b35d5f646d6ebaa33}
+
+
+Set a local variable, creates it if it does not exists. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & the name of the variable \\
+\hline
+{\em data} & the data \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/martin/repositories/\+Concurrent\+Data\+Sharer/include/concurrentdatasharer.\+h\item 
+/home/martin/repositories/\+Concurrent\+Data\+Sharer/src/concurrentdatasharer.\+cpp\end{DoxyCompactItemize}

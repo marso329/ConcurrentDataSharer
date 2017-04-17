@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="classDataBaseElement">
+<title>DataBaseElement class Reference</title>
+<para>Inheritance diagram for DataBaseElement</para>
+<para>
+    <figure>
+        <title>Inheritance graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classDataBaseElement__inherit__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Collaboration diagram for DataBaseElement</para>
+<para>
+    <figure>
+        <title>Collaboration graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classDataBaseElement__coll__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title>Private Attributes</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string _name</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string _data</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>CallbackSig callback</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classDataBaseElement_1a253e80879bd04adf40df9d6f1b7828d2">DataBaseElement</link> (
+std::string const &amp; , std::string const &amp; )</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classDataBaseElement_1a0e0232a59e6f85e420762f078131279a">DataBaseElement</link> (
+<link linkend="classQueueElementSet">QueueElementSet</link> * )</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classDataBaseElement_1a2969d9803ec8bf6a33d46b7430a10b05">~DataBaseElement</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classDataBaseElement_1a2fd512bc7a9f6b1ff64a3bc8f7fdc897">getData</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classDataBaseElement_1ae818fb7eec2c99d68c02526de1db08a9">setData</link> (
+std::string const &amp; data)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classDataBaseElement_1a84795ff4c0468accc666c72f22ccc021">setCallback</link> (
+CallbackSig func)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classDataBaseElement_1a07826cebc0083bd9004e5fbc8cf618b1">runCallback</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Member Data Documentation</title>
+        </section>
+            <section xml:id="classDataBaseElement_1a253e80879bd04adf40df9d6f1b7828d2">
+                <title>DataBaseElement::DataBaseElement (std::string const &amp;, std::string const &amp;)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classDataBaseElement_1a0e0232a59e6f85e420762f078131279a">
+                <title>DataBaseElement::DataBaseElement (QueueElementSet *)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classDataBaseElement_1a2969d9803ec8bf6a33d46b7430a10b05">
+                <title>DataBaseElement::~DataBaseElement ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classDataBaseElement_1a2fd512bc7a9f6b1ff64a3bc8f7fdc897">
+                <title>std::string DataBaseElement::getData ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classDataBaseElement_1ae818fb7eec2c99d68c02526de1db08a9">
+                <title>void DataBaseElement::setData (std::string const &amp;data)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classDataBaseElement_1a84795ff4c0468accc666c72f22ccc021">
+                <title>void DataBaseElement::setCallback (CallbackSig func)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classDataBaseElement_1a07826cebc0083bd9004e5fbc8cf618b1">
+                <title>void DataBaseElement::runCallback ()</title> <emphasis></emphasis>
+                
+            </section>
+</section>

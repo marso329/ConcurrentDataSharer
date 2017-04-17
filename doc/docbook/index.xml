@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <info>
+    <title>ConcurrentDataSharer</title>
+    </info>
+    <chapter>
+        <title>Namespace Documentation</title>
+        <xi:include href="namespaceboost_1_1python.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </chapter>
+        <xi:include href="md__home_martin_repositories_ConcurrentDataSharer_README.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <chapter>
+        <title>Class Documentation</title>
+        <xi:include href="classBlockingQueue.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classclientData.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classConcurrentDataSharer.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classDataBaseElement.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classQueueElementBase.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classQueueElementCallback.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classQueueElementGet.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classQueueElementMultiSend.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classQueueElementSet.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="classQueueElementTCPSend.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </chapter>
+    <chapter>
+        <title>File Documentation</title>
+        <xi:include href="cmake_2CMakeFiles_2ConcurrentDataSharer_8dir_2link_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2clienttest_2CMakeFiles_2main_8dir_2link_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2clienttest1_2CMakeFiles_2main1_8dir_2link_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeFiles_2ConcurrentDataSharer_8dir_2link_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="cmake_2CMakeLists_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeLists_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="doc_2CMakeLists_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2clienttest_2CMakeLists_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2clienttest1_2CMakeLists_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2CMakeLists_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeLists_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeCache_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="doc_2CMakeCache_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeCache_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeFiles_23_85_81_2CompilerIdC_2CMakeCCompilerId_8c.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="doc_2CMakeFiles_23_85_81_2CompilerIdC_2CMakeCCompilerId_8c.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeFiles_23_85_81_2CompilerIdC_2CMakeCCompilerId_8c.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeFiles_23_85_81_2CompilerIdCXX_2CMakeCXXCompilerId_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="doc_2CMakeFiles_23_85_81_2CompilerIdCXX_2CMakeCXXCompilerId_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeFiles_23_85_81_2CompilerIdCXX_2CMakeCXXCompilerId_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeFiles_2feature__tests_8c.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="doc_2CMakeFiles_2feature__tests_8c.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeFiles_2feature__tests_8c.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeFiles_2feature__tests_8cxx.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="doc_2CMakeFiles_2feature__tests_8cxx.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeFiles_2feature__tests_8cxx.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeFiles_2TargetDirectories_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="doc_2CMakeFiles_2TargetDirectories_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="test_2pythontest_2CMakeFiles_2TargetDirectories_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="CMakeRuleHashes_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="count_8txt.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="BlockingQueue_8h.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="concurrentdatasharer_8h.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="structures_8h.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="README_8md.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="BlockingQueue_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="concurrentdatasharer_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="structures_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="main_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="_2main_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="concurrentdatasharer__python_8cpp.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="concurrentdatasharer__python_8h.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </chapter>
+    <chapter>
+        <title>Directory Documentation</title>
+        <xi:include href="dir_45e41c1c577a7a51c7abfbf9de7c2218.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_5925f622c45765ab58dfa342285cc499.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_cd3db5597f2261188045d3f032b6e500.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_b0becaad102e215b679f93b57a3b0c18.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_3c5bba4a0a02067e35ccbcc34916118f.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_a2ff7838e19bfc42e2fa0dbd30041a0b.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_33c4867c58fb9a755f48181356071b68.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_017ad5e908c41501f6a06b5119b37293.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_2279ec034eb197bd8bf8ccbe0895286f.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_429f7ad8260db40d0cb30f4899c76371.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_dec13c9416df15bd5a92c365c23769ba.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_fc57c17107d9cc94f8b7d2ea70140699.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_7deeaf3993b6be5d84d1517da7be2d47.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_34e32b2767b9a66498b8d81e5df7818f.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_d44c64559bbebec7f509842c48db8b23.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_60d60925df49deb12670344267973237.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_68267d1309a1af8e8297ef4c3efbcdba.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        <xi:include href="dir_13e138d54eb8818da29c3992edef070a.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </chapter>
+</book>

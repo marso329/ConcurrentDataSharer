@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="classQueueElementBase">
+<title>QueueElementBase class Reference</title>
+<para>Inheritance diagram for QueueElementBase</para>
+<para>
+    <figure>
+        <title>Inheritance graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementBase__inherit__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Collaboration diagram for QueueElementBase</para>
+<para>
+    <figure>
+        <title>Collaboration graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementBase__coll__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title>Protected Attributes</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string _name</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string _data</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementBase_1aefb69801423aded8faf3ae8c3e9baa2c">QueueElementBase</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>virtual <link linkend="classQueueElementBase_1a33e3cff81a300ce24c32f11be16a1e17">~QueueElementBase</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classQueueElementBase_1a9c70e7d666436bfeffc430a5346e19a4">getName</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classQueueElementBase_1a10026078f5ea51ffeee0c0de4b0f27c4">getData</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Member Data Documentation</title>
+        </section>
+            <section xml:id="classQueueElementBase_1aefb69801423aded8faf3ae8c3e9baa2c">
+                <title>QueueElementBase::QueueElementBase ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementBase_1a33e3cff81a300ce24c32f11be16a1e17">
+                <title>virtual QueueElementBase::~QueueElementBase ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementBase_1a9c70e7d666436bfeffc430a5346e19a4">
+                <title>std::string QueueElementBase::getName ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementBase_1a10026078f5ea51ffeee0c0de4b0f27c4">
+                <title>std::string QueueElementBase::getData ()</title> <emphasis></emphasis>
+                
+            </section>
+</section>

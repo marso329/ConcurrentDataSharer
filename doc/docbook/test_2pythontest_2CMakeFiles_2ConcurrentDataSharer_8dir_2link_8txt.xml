@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="test_2pythontest_2CMakeFiles_2ConcurrentDataSharer_8dir_2link_8txt">
+    <title>link.txt File Reference</title>
+<para>Include dependency diagram for link.txt</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="test_2pythontest_2CMakeFiles_2ConcurrentDataSharer_8dir_2link_8txt__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Included by dependency diagram for link.txt</para>
+<para>
+    <figure>
+        <title>Dependency diagram</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="test_2pythontest_2CMakeFiles_2ConcurrentDataSharer_8dir_2link_8txt__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title>Variables</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>usr bin c fPIC <link linkend="test_2pythontest_2CMakeFiles_2ConcurrentDataSharer_8dir_2link_8txt_1a5f87c8f8e33670f7c8c5221b6be1bcc4">std</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>usr bin c fPIC <link linkend="test_2pythontest_2CMakeFiles_2ConcurrentDataSharer_8dir_2link_8txt_1ab65a9b6457c4853ed17f89f945516e66">soname</link></para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+    <simplesect>
+        <title>Detailed Description</title>
+    <para>Definition in file /home/martin/repositories/ConcurrentDataSharer/test/pythontest/CMakeFiles/ConcurrentDataSharer.dir/link.txt</para>
+    </simplesect>
+</section>

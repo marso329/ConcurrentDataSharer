@@ -1,0 +1,252 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="classQueueElementTCPSend">
+<title>QueueElementTCPSend class Reference</title>
+<para>Inheritance diagram for QueueElementTCPSend</para>
+<para>
+    <figure>
+        <title>Inheritance graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementTCPSend__inherit__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+<para>Collaboration diagram for QueueElementTCPSend</para>
+<para>
+    <figure>
+        <title>Collaboration graph</title>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="1" fileref="classQueueElementTCPSend__coll__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </figure>
+</para>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Private Attributes</title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>TCPSend _purpose</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>const bool _responsRequired</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string _tag</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string _requestor</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::condition_variable cv</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>bool ready</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::mutex m</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementTCPSend_1a3aa9f7c8e3173d2864360e141d860fab">QueueElementTCPSend</link> (
+std::string const &amp; name, std::string const &amp; data, TCPSend purpose, bool respons)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementTCPSend_1a71537a3fb0864592c270afd627df7a27">QueueElementTCPSend</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classQueueElementTCPSend_1a198be59bc4f6f914c85027211fcb8aa1">setTag</link> (
+std::string const &amp; tag)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classQueueElementTCPSend_1a4383f6077d21932f6dead51d8a49f30d">getTag</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>bool <link linkend="classQueueElementTCPSend_1a01857057cc95486764d996723a4a2f5e">getResponsRequired</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>TCPSend <link linkend="classQueueElementTCPSend_1a7a42ab6be9a3811c7eaee728b41c3754">getPurpose</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classQueueElementTCPSend_1a788d2b6a8667c99a5d7282e65124c642">setRequestor</link> (
+std::string const &amp; requestor)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classQueueElementTCPSend_1a4d75205d089624600e851ea7745caa16">getRequestor</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classQueueElementTCPSend_1aaa0e006f646046245095aa28b1cb2e98">setData</link> (
+std::string const &amp; data)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classQueueElementTCPSend_1a5537c19f909690c8aff22506d634af97">getData</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>std::string <link linkend="classQueueElementTCPSend_1a37ff81fd3e511fb704478da714024f00">getDataNoneBlocking</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para> <link linkend="classQueueElementTCPSend_1a0662697168cf1a1d6c6634a388119b73">~QueueElementTCPSend</link> (
+)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title></title>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>void <link linkend="classQueueElementTCPSend_1af5dc75406fdbb067008c1c439175d3c9">serialize</link> (
+Archive &amp; ar, const unsigned int version)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>Member Data Documentation</title>
+        </section>
+            <section xml:id="classQueueElementTCPSend_1a3aa9f7c8e3173d2864360e141d860fab">
+                <title>QueueElementTCPSend::QueueElementTCPSend (std::string const &amp;name, std::string const &amp;data, TCPSend purpose, bool respons)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a71537a3fb0864592c270afd627df7a27">
+                <title>QueueElementTCPSend::QueueElementTCPSend ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a198be59bc4f6f914c85027211fcb8aa1">
+                <title>void QueueElementTCPSend::setTag (std::string const &amp;tag)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a4383f6077d21932f6dead51d8a49f30d">
+                <title>std::string QueueElementTCPSend::getTag ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a01857057cc95486764d996723a4a2f5e">
+                <title>bool QueueElementTCPSend::getResponsRequired ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a7a42ab6be9a3811c7eaee728b41c3754">
+                <title>TCPSend QueueElementTCPSend::getPurpose ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a788d2b6a8667c99a5d7282e65124c642">
+                <title>void QueueElementTCPSend::setRequestor (std::string const &amp;requestor)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a4d75205d089624600e851ea7745caa16">
+                <title>std::string QueueElementTCPSend::getRequestor ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1aaa0e006f646046245095aa28b1cb2e98">
+                <title>void QueueElementTCPSend::setData (std::string const &amp;data)</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a5537c19f909690c8aff22506d634af97">
+                <title>std::string QueueElementTCPSend::getData ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a37ff81fd3e511fb704478da714024f00">
+                <title>std::string QueueElementTCPSend::getDataNoneBlocking ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1a0662697168cf1a1d6c6634a388119b73">
+                <title>QueueElementTCPSend::~QueueElementTCPSend ()</title> <emphasis></emphasis>
+                
+            </section>
+            <section xml:id="classQueueElementTCPSend_1af5dc75406fdbb067008c1c439175d3c9">
+                <title>void QueueElementTCPSend::serialize (Archive &amp;ar, const unsigned int version)</title> <emphasis></emphasis>
+                
+            </section>
+</section>

@@ -1,8 +1,13 @@
 #ifndef STRUCTURES_H_
 #define STRUCTURES_H_
+
+//standard includes
+#include <sstream>
 #include <string>
 #include <condition_variable>
 #include <mutex>
+
+//boost includes
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/base_object.hpp>
@@ -11,7 +16,7 @@
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
-#include <sstream>
+
 
 typedef void (*CallbackSig)();
 
