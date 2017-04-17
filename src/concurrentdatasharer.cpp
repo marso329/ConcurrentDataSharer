@@ -223,6 +223,7 @@ void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 		std::string outbound_data = ss.str();
 		QueueElementTCPSend* toSend = new QueueElementTCPSend(dataReceived->getName(),
 				outbound_data, TCPPERSONALINTRODUCTION,false);
+		std::cout<<"sent personal introduction"<<std::endl;
 		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
 if(!change){
 	delete dataReceived;
@@ -324,6 +325,7 @@ void ConcurrentDataSharer::TCPRecvSession(
 std::cout<<"avail: "<<sock->available()<<std::endl;
 std::size_t bufferSize = sock->available();
 if(bufferSize==0){
+	std::cout<<"bufferSize=0"<<std::endl;
 	return;
 }
 char* buffer = new char[bufferSize];
@@ -331,7 +333,7 @@ char* headerBuffer = new char[32];
 boost::system::error_code ec;
 unsigned int packetSize = sock->read_some(
 		boost::asio::buffer(buffer, bufferSize), ec);
-
+std::cout<<"reveived: "<<packetSize<<" bytes of data"<<std::endl;
 if (ec) {
 	throw std::runtime_error("fetch failed");
 }
@@ -347,6 +349,7 @@ std::istringstream data(std::string(buffer + 32, inbound_data_size));
 	boost::archive::text_iarchive archive(data);
 	QueueElementTCPSend* dataReceived = new QueueElementTCPSend();
 	archive >> dataReceived;
+	std::cout<<"put TCP data on recvQueue"
 	_recvQueue->Put(dynamic_cast<QueueElementBase*>(dataReceived));
 
 delete buffer;
@@ -421,9 +424,13 @@ void ConcurrentDataSharer::TCPSend() {
 		header_stream << std::setw(32) << std::hex << outbound_data.size();
 		std::string outbound_header = header_stream.str();
 		//push header and data to buffer
+
+		static char eol[] = { '\n' };
+
 		std::vector<boost::asio::const_buffer> buffers;
 		buffers.push_back(boost::asio::buffer(outbound_header));
 		buffers.push_back(boost::asio::buffer(outbound_data));
+		buffers.push_back(boost::asio::buffer(eol));
 		//socket_TCP_send->send(buffers);
 		boost::asio::async_write(*socket_TCP_send,buffers,
 				boost::bind(&ConcurrentDataSharer::handleTCPSendError, this,
