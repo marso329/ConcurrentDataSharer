@@ -243,6 +243,7 @@ if(!change){
 void ConcurrentDataSharer::mainLoop() {
 	while (true) {
 		QueueElementBase* data = _recvQueue->Take();
+		std::cout<<"mainloop handling data"<<std::endl;
 
 		if (QueueElementSet* package = dynamic_cast<QueueElementSet*>(data)) {
 			handleTCPRecv(data);
@@ -254,6 +255,7 @@ void ConcurrentDataSharer::mainLoop() {
 			handleTCPRecv(data);
 		} else if (QueueElementTCPSend* package =
 				dynamic_cast<QueueElementTCPSend*>(data)) {
+			std::cout<<"mainloop sending to handleQueueElementTCPSend"<<std::endl;
 			handleQueueElementTCPSend(package);
 			//handleTCPRecv(data);
 		}
