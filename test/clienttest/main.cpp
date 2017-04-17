@@ -15,6 +15,7 @@ int main(int argc, char ** argv) {
 		}
 		usleep(1000);
 	}
+	std::cout<<"NEW client"<<std::endl;
 	std::vector<std::string> clients = sharer->getClients();
 	for (auto it = clients.begin(); it != clients.end(); it++) {
 		if (*it != sharer->getMyName()) {

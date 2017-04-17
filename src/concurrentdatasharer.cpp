@@ -62,6 +62,7 @@ std::vector<std::string> ConcurrentDataSharer::getClientVariables(
 	QueueElementTCPSend * toSend = new QueueElementTCPSend(client, "",
 			TCPSENDVARIABLES,true);
 	_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+	std::cout<<"put tcp package for client variables in queue"<<std::endl;
 	std::string data = toSend->getData();
 	delete toSend;
 	std::istringstream ar(data);
@@ -118,6 +119,7 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(QueueElementTCPSend* data) 
 		std::string outbound_data = ss.str();
 
 		QueueElementTCPSend* toSend=new QueueElementTCPSend(data->getRequestor(),outbound_data,TCPREPLYVARIABLES,false);
+		std::cout<<"got request for variables from: "<<data->getRequestor()<<std::endl;
 		toSend->setTag(data->getTag());
 		toSend->setRequestor(getMyName());
 		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
@@ -375,11 +377,12 @@ void ConcurrentDataSharer::TCPSend() {
 		buffers.push_back(boost::asio::buffer(outbound_header));
 		buffers.push_back(boost::asio::buffer(outbound_data));
 		//socket_TCP_send->send(buffers);
-		socket_TCP_send->async_send(buffers,
+		boost::asio::async_write(*socket_TCP_send,buffers,
 				boost::bind(&ConcurrentDataSharer::handleTCPSendError, this,
 						boost::asio::placeholders::error,
 						boost::asio::placeholders::bytes_transferred));
 		io_service_send.run_one();
+		std::cout<<"io_service run once returned"<<std::endl;
 		if(!operation->getResponsRequired()){
 		delete data;
 		}
@@ -391,7 +394,8 @@ void ConcurrentDataSharer::handleTCPSendError(
 	if (error) {
 		throw std::runtime_error("Multicast send failed");
 	}
-	//socket_TCP_send->close();
+
+	std::cout<<"successfully sent: "<<bytes_recvd<<" bytes of data"<<std::endl;
 
 
 }
