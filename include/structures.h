@@ -207,12 +207,12 @@ private:
 
 class clientData {
 public:
-	clientData() {
+	clientData():_TCP_port(0) {
 	}
 	;
 	clientData(std::string name, std::vector<std::string> IPV4,
-			std::vector<std::string> IPV6) :
-			_name(name), IPV4Adresses(IPV4), IPV6Adresses(IPV6) {
+			std::vector<std::string> IPV6,short unsigned TCP_port) :
+			_name(name), IPV4Adresses(IPV4), IPV6Adresses(IPV6),_TCP_port(TCP_port) {
 	}
 	;
 	std::vector<std::string> getIPV4() {
@@ -223,6 +223,9 @@ public:
 	}
 	std::string getName() {
 		return _name;
+	}
+	unsigned short getPort() {
+		return _TCP_port;
 	}
 	~clientData() {
 	}
@@ -235,10 +238,12 @@ private:
 		ar & _name;
 		ar & IPV4Adresses;
 		ar & IPV6Adresses;
+		ar & _TCP_port;
 	}
 	std::string _name;
 	std::vector<std::string> IPV4Adresses;
 	std::vector<std::string> IPV6Adresses;
+	short unsigned _TCP_port;
 };
 
 #endif

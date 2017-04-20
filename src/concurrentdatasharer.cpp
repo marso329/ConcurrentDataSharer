@@ -10,19 +10,31 @@ ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 	_recvQueue = new BlockingQueue<QueueElementBase*>(255);
 	_TCPSendQueue = new BlockingQueue<QueueElementBase*>(255);
 
-	//create my identity
-	_myself = new clientData(_name, getLocalIPV4Adresses(),
-			getLocalIPV6Adresses());
-	_clients[_name] = _myself;
 
 	//handling clients
 	_clientLock = new std::mutex();
 	newClientCallback = NULL;
 
-	_mainThread = new boost::thread(
-			boost::bind(&ConcurrentDataSharer::mainLoop, this));
+	_TCPLock=new std::mutex();
+	TCP_port_chosen=false;
+
+	//let it find a good port
 	_TCPRecvThread = new boost::thread(
 			boost::bind(&ConcurrentDataSharer::TCPRecv, this));
+	{
+    std::unique_lock<std::mutex> lock(*_TCPLock);
+    while(!TCP_port_chosen){
+        TCP_chosen_cond.wait(lock );
+    }
+	}
+
+	//create my identity
+	_myself = new clientData(_name, getLocalIPV4Adresses(),
+			getLocalIPV6Adresses(),TCP_recv_port);
+	_clients[_name] = _myself;
+
+	_mainThread = new boost::thread(
+			boost::bind(&ConcurrentDataSharer::mainLoop, this));
 	_TCPSendThread = new boost::thread(
 			boost::bind(&ConcurrentDataSharer::TCPSend, this));
 	_multiSendThread = new boost::thread(
@@ -144,7 +156,6 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		boost::archive::text_iarchive archive(stream);
 		clientData* dataReceived = new clientData();
 		archive >> dataReceived;
-		std::vector<std::string> adress = dataReceived->getIPV4();
 		bool change = false;
 		_clientLock->lock();
 		if (_clients.find(dataReceived->getName()) == _clients.end()) {
@@ -307,17 +318,32 @@ void ConcurrentDataSharer::TCPRecvSession(
 }
 
 void ConcurrentDataSharer::TCPRecv() {
-	boost::asio::ip::tcp::acceptor acceptor(io_service_TCP_recv,
+	for(std::size_t i=0;i<10;i++){
+
+	try{
+
+boost::asio::ip::tcp::acceptor acceptor(io_service_TCP_recv,
 			boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
 					TCP_recv_port));
-	while (true) {
+{
+std::unique_lock<std::mutex> lock(*_TCPLock);
+TCP_port_chosen=true;
+TCP_chosen_cond.notify_all();
+}
+while (true) {
 		boost::shared_ptr<boost::asio::ip::tcp::socket> sock(
 				new boost::asio::ip::tcp::socket(io_service_TCP_recv));
 		acceptor.accept(*sock);
 		boost::thread t(
 				boost::bind(&ConcurrentDataSharer::TCPRecvSession, this, sock));
 	}
+	}
+	catch (boost::exception &e){
+		TCP_recv_port+=1;
+	}
 
+}
+	throw std::runtime_error("changed adresses to many times");
 }
 
 void ConcurrentDataSharer::TCPSend() {
@@ -341,7 +367,6 @@ void ConcurrentDataSharer::TCPSend() {
 
 			}
 			std::ostringstream port;
-			port << TCP_recv_port;
 			_clientLock->lock();
 			auto it = _clients.find(operation->getName());
 			if (it == _clients.end()) {
@@ -350,11 +375,13 @@ void ConcurrentDataSharer::TCPSend() {
 				continue;
 			}
 			std::vector<std::string> clientadresses = (*it).second->getIPV4();
+			port << (*it).second->getPort();
 			_clientLock->unlock();
 			if (clientadresses.size() == 0) {
 				delete data;
 				continue;
 			}
+
 			boost::asio::ip::tcp::resolver::iterator endpoint =
 					resolver_TCP->resolve(
 							boost::asio::ip::tcp::resolver::query(

@@ -32,10 +32,14 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
+#include <boost/exception/all.hpp>
 
 //own includes
 #include "structures.h"
 #include "BlockingQueue.h"
+
+
+typedef boost::error_info<struct tag_errmsg, std::string> errmsg_info;
 /**
  * \class ConcurrentDataSharer
  *
@@ -305,11 +309,15 @@ private:
 	///TCP sending io_service
 	boost::asio::io_service io_service_TCP_recv;
 	///TCP sending port, should be set in constructor
-	const short TCP_recv_port = 30010;
+	short unsigned TCP_recv_port = 30010;
 
 //TCP send
 	///TCP sending io_service
 	boost::asio::io_service io_service_TCP_send;
+	///used for allowing the TCP thread to find good port before introductions
+	std::mutex* _TCPLock;
+	bool TCP_port_chosen;
+	std::condition_variable TCP_chosen_cond;
 
 //request connection
 	///map for request send to other clients
