@@ -163,6 +163,8 @@ public:
 	std::vector<std::string> getClientVariables(std::string const & client);
 
 protected:
+	///queue used by _TCPRecvThread and _multiRecvThread to send QueueElementBase to _mainThread
+	BlockingQueue<QueueElementBase*>* _recvQueue;
 private:
 	/** \brief deleted default constructor
 	 */
@@ -270,8 +272,6 @@ private:
 	const std::string _name;
 	/// queue used to send QueueElementMultiSend elements to _multiSendThread
 	BlockingQueue<QueueElementBase*>* _multiSendQueue;
-	///queue used by _TCPRecvThread and _multiRecvThread to send QueueElementBase to _mainThread
-	BlockingQueue<QueueElementBase*>* _recvQueue;
 	/// queue used to send QueueElementTCPSend elements to _TCPSendThread
 	BlockingQueue<QueueElementBase*>* _TCPSendQueue;
 	///threads that handles data from _TCPRecvThread and _multiRecvThread
