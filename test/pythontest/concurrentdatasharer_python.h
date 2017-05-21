@@ -32,6 +32,14 @@ public:
 		}
 		return temp;
 	}
+	boost::python::list getLogsPython(){
+		boost::python::list temp;
+		std::vector<std::string> clients=getLogger();
+		for (auto it =clients.begin();it!=clients.end();it++){
+			temp.append(*it);
+		}
+		return temp;
+	}
 
 	boost::python::list getClientVariablesListPython(std::string const& client){
 		std::vector<std::string> var=getClientVariables(client);
@@ -42,8 +50,14 @@ public:
 		return temp;
 	}
 
-	int getClientVariableIntPython(std::string const& client,std::string const& var){
-		return get<int>(client,var);
+	object getClientVariableIntPython(std::string const& client,std::string const& var){
+		QueueElementTCPSend * toSend = new QueueElementTCPSend(client, var,
+				TCPGETVARIABLE, true);
+		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+		std::string data = toSend->getData();
+		delete toSend;
+
+		return ((pickler->loads)(object(data).attr("encode")()));
 	}
 
 	void setValuePython(std::string const& name,boost::python::object& obj){
@@ -73,7 +87,7 @@ BOOST_PYTHON_MODULE(ConcurrentDataSharer)
 		   .def("setValue", &ConcurrentDataSharerPython::setValuePython,
         return_value_policy<reference_existing_object>()).def("getClients",&ConcurrentDataSharerPython::getClientsPython)
 		.def("getClientVariablesList",&ConcurrentDataSharerPython::getClientVariablesListPython).def("getClientVariable",&ConcurrentDataSharerPython::getClientVariableIntPython)
-		.def("getValue",&ConcurrentDataSharerPython::getValuePython);
+		.def("getValue",&ConcurrentDataSharerPython::getValuePython).def("getLogs",&ConcurrentDataSharerPython::getLogsPython);
 
 }
 

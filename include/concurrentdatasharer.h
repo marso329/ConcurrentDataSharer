@@ -19,6 +19,7 @@
 #include <arpa/inet.h>
 #include <mutex>
 #include <unordered_map>
+#include <functional>
 
 //boost includes
 #include <boost/archive/tmpdir.hpp>
@@ -33,11 +34,12 @@
 #include <boost/asio.hpp>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include <boost/exception/all.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 //own includes
 #include "structures.h"
 #include "BlockingQueue.h"
-
+#include "constants.h"
 
 typedef boost::error_info<struct tag_errmsg, std::string> errmsg_info;
 /**
@@ -112,6 +114,22 @@ public:
 		ia >> returnData;
 		return returnData;
 	}
+	/** \brief Subscribes to a variable by passing a callback funtion
+	 * \param client the name of the client
+	 *\param name the name of the variable
+	 *\param func callback function
+	 */
+	template<typename T>
+	void subscribe(std::string const& client, std::string const& name,
+			void (*SubscribeFunc)(T)) {
+		std::function<void(const std::string&)> func =createSubscription<T>(SubscribeFunc);
+		QueueElementSubscribe* toSend=new QueueElementSubscribe(client,name,func);
+		_recvQueue->Put(toSend);
+		_subscription[client+name]=func;
+
+
+	}
+
 	/** \brief Get a variable from another client
 	 * \param client the name of the client
 	 *\param name the name of the variable
@@ -134,6 +152,11 @@ public:
 	 * \return std::vector<std::string> with the names of all the clients
 	 */
 	std::vector<std::string> getClients();
+
+	/** \brief returns all logging messages
+	 * \return std::vector<std::string> with the latest logging messages
+	 */
+	std::vector<std::string> getLogger();
 
 	/** \brief connects a callback when a new clients connects
 	 * \param  func the function to connect
@@ -165,6 +188,8 @@ public:
 protected:
 	///queue used by _TCPRecvThread and _multiRecvThread to send QueueElementBase to _mainThread
 	BlockingQueue<QueueElementBase*>* _recvQueue;
+	/// queue used to send QueueElementTCPSend elements to _TCPSendThread
+	BlockingQueue<QueueElementBase*>* _TCPSendQueue;
 private:
 	/** \brief deleted default constructor
 	 */
@@ -174,6 +199,18 @@ private:
 	 * \return  a random string
 	 */
 	std::string generateRandomName(std::size_t len);
+
+	template<typename T>
+	std::function<void(const std::string&)> createSubscription(
+			void (*SubscribeFunc)(T)) {
+		return [=](const std::string& data) {std::istringstream ar(data);
+			boost::archive::text_iarchive ia(ar);
+			T returnData;
+			ia >> returnData;
+			SubscribeFunc(returnData);
+			return;};
+	}
+	;
 
 	/** \brief returns a list with this clients IPV4 adresses
 	 * \return  a list with this clients IPV4 adresses
@@ -196,6 +233,9 @@ private:
 	 * It takes QueueElementBase from _recvQueue and decides which function to use using dynamic_cast
 	 */
 	void mainLoop();
+	/** \brief target function for the ping thread which sends out pings to all clients at regular intervals
+	 */
+	void pinger();
 
 	/** \brief target function for the TCP thread _TCPRecvThread which accepts TCP connections and creates a TCP handler with TCPRecvSession as target function
 	 * \see ConcurrentDataSharer::TCPRecvSession()
@@ -259,7 +299,7 @@ private:
 
 //const and initialized at creation
 
-	///name of the group
+///name of the group
 	const std::string _groupName;
 	//multicast
 	///the multicast adress
@@ -272,8 +312,6 @@ private:
 	const std::string _name;
 	/// queue used to send QueueElementMultiSend elements to _multiSendThread
 	BlockingQueue<QueueElementBase*>* _multiSendQueue;
-	/// queue used to send QueueElementTCPSend elements to _TCPSendThread
-	BlockingQueue<QueueElementBase*>* _TCPSendQueue;
 	///threads that handles data from _TCPRecvThread and _multiRecvThread
 	boost::thread* _mainThread;
 	///thread which is used to send TCP packages
@@ -286,6 +324,8 @@ private:
 	boost::thread* _multiRecvThread;
 	///the database storing local variables
 	std::unordered_map<std::string, DataBaseElement*> _dataBase;
+	///thread handling pinging
+	boost::thread* _pingThread;
 
 //multicast receiving
 	///socket used for receiving UDP packages
@@ -332,6 +372,13 @@ private:
 	std::mutex* _clientLock;
 	///function pointer for new client callback
 	CallbackSig newClientCallback;
+
+	//for logging
+	logger* logging_buffer;
+
+	//for subscriptions
+	std::unordered_map<std::string, std::function<void(const std::string&)>> _subscription;
+
 
 };
 #endif

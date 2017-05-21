@@ -6,6 +6,8 @@
 #include <string>
 #include <condition_variable>
 #include <mutex>
+#include <chrono>
+#include <functional>
 
 //boost includes
 #include <boost/archive/text_oarchive.hpp>
@@ -16,9 +18,45 @@
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/circular_buffer.hpp>
 
+//my includes
+#include "constants.h"
 
 typedef void (*CallbackSig)();
+
+class logger {
+public:
+	logger() {
+		logging_buffer = new boost::circular_buffer<std::string>(LOGGERSIZE);
+		lock = new std::mutex();
+	}
+	;
+	~logger() {
+		delete logging_buffer;
+		delete lock;
+	}
+	;
+	void push_back(std::string message) {
+		lock->lock();
+		logging_buffer->push_back(message);
+		lock->unlock();
+	}
+	std::vector<std::string> get_logs() {
+		std::vector<std::string> temp;
+		lock->lock();
+		for (auto it = logging_buffer->begin(); it != logging_buffer->end();
+				it++) {
+			temp.push_back(*it);
+		}
+		lock->unlock();
+		return temp;
+	}
+private:
+	//logging
+	boost::circular_buffer<std::string>* logging_buffer;
+	std::mutex* lock;
+};
 
 class QueueElementBase {
 public:
@@ -70,47 +108,60 @@ protected:
 };
 
 enum TCPSend {
-	TCPUNDEFINED, TCPSENDVARIABLES, TCPREPLYVARIABLES,TCPPERSONALINTRODUCTION,TCPGETVARIABLE,TCPREPLYGETVARIABLE
+	TCPUNDEFINED,
+	TCPSENDVARIABLES,
+	TCPREPLYVARIABLES,
+	TCPPERSONALINTRODUCTION,
+	TCPGETVARIABLE,
+	TCPREPLYGETVARIABLE,
+	TCPSENDCLIENTS,
+	TCPREPLYCLIENTS,
+	TCPPING,
+	TCPPINGREPLY,
+	TCPSTARTSUBSCRIPTION,
+	TCPSUBSCRIPTION
 };
 
 class QueueElementTCPSend: public QueueElementBase {
 public:
 	QueueElementTCPSend(std::string const& name, std::string const& data,
-			TCPSend purpose, bool respons):_responsRequired(respons) {
+			TCPSend purpose, bool respons) :
+			_responsRequired(respons) {
 		_name = name;
 		_data = data;
 		_purpose = purpose;
-		_tag="";
+		_tag = "";
 
 	}
-	QueueElementTCPSend():_responsRequired(false) {
+	QueueElementTCPSend() :
+			_responsRequired(false) {
 		_name = "";
 		_data = "";
 		_purpose = TCPUNDEFINED;
-	_tag="";
+		_tag = "";
 	}
 	;
-	void setTag(std::string const& tag){
-		_tag=tag;
+	void setTag(std::string const& tag) {
+		_tag = tag;
 	}
-	std::string getTag(){
+	std::string getTag() {
 		return _tag;
 	}
-	bool getResponsRequired(){
+	bool getResponsRequired() {
 		return _responsRequired;
 	}
 	TCPSend getPurpose() {
 		return _purpose;
 	}
 	;
-	void setRequestor(std::string const& requestor){
-		_requestor=requestor;
+	void setRequestor(std::string const& requestor) {
+		_requestor = requestor;
 	}
 
-	std::string getRequestor(){
+	std::string getRequestor() {
 		return _requestor;
 	}
-	void setData(std::string const& data){
+	void setData(std::string const& data) {
 		_data = data;
 		{
 			std::lock_guard < std::mutex > lk(m);
@@ -180,6 +231,31 @@ private:
 protected:
 };
 
+
+
+class QueueElementSubscribe: public QueueElementBase {
+public:
+	QueueElementSubscribe(std::string const& client,std::string const& var,std::function<void(const std::string&)> func) {
+		_name = client;
+		callback = func;
+		variable=var;
+	}
+	std::function<void(const std::string&)>  getCallback() {
+		return callback;
+	}
+	std::string getVar(){
+		return variable;
+	}
+	~QueueElementSubscribe() {
+	}
+	;
+private:
+	std::function<void(const std::string&)> callback;
+	std::string variable;
+
+protected:
+};
+
 class DataBaseElement {
 public:
 	DataBaseElement(std::string const&, std::string const&);
@@ -207,14 +283,30 @@ private:
 
 class clientData {
 public:
-	clientData():_TCP_port(0) {
+	clientData() :
+			_TCP_port(0) {
+		last_ping=std::chrono::high_resolution_clock::now();
 	}
 	;
 	clientData(std::string name, std::vector<std::string> IPV4,
-			std::vector<std::string> IPV6,short unsigned TCP_port) :
-			_name(name), IPV4Adresses(IPV4), IPV6Adresses(IPV6),_TCP_port(TCP_port) {
+			std::vector<std::string> IPV6, short unsigned TCP_port) :
+			_name(name), IPV4Adresses(IPV4), IPV6Adresses(IPV6), _TCP_port(
+					TCP_port) {
+		last_ping=std::chrono::high_resolution_clock::now();
 	}
 	;
+	clientData(const clientData& data) :
+			_name(data._name), IPV4Adresses(data.IPV4Adresses), IPV6Adresses(
+					data.IPV6Adresses), _TCP_port(data._TCP_port) {
+		last_ping=std::chrono::high_resolution_clock::now();
+	}
+
+	clientData(const clientData* data) :
+			_name(data->_name), IPV4Adresses(data->IPV4Adresses), IPV6Adresses(
+					data->IPV6Adresses), _TCP_port(data->_TCP_port) {
+		last_ping=std::chrono::high_resolution_clock::now();
+	}
+
 	std::vector<std::string> getIPV4() {
 		return IPV4Adresses;
 	}
@@ -230,6 +322,8 @@ public:
 	~clientData() {
 	}
 	;
+	std::chrono::time_point<std::chrono::high_resolution_clock> last_ping;
+	std::size_t ping_failure_counter=0;
 protected:
 private:
 	friend class boost::serialization::access;

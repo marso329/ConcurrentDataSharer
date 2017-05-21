@@ -6,31 +6,45 @@ ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 				boost::asio::ip::address::from_string(multicastadress)), listen_address(
 				boost::asio::ip::address::from_string(listenadress)), multicast_port(
 				multicastport), _name(generateRandomName(10)) {
+	logging_buffer = new logger();
+	logging_buffer->push_back("Created instance");
 	_multiSendQueue = new BlockingQueue<QueueElementBase*>(255);
 	_recvQueue = new BlockingQueue<QueueElementBase*>(255);
 	_TCPSendQueue = new BlockingQueue<QueueElementBase*>(255);
-
 
 	//handling clients
 	_clientLock = new std::mutex();
 	newClientCallback = NULL;
 
-	_TCPLock=new std::mutex();
-	TCP_port_chosen=false;
+	_TCPLock = new std::mutex();
+	TCP_port_chosen = false;
 
 	//let it find a good port
 	_TCPRecvThread = new boost::thread(
 			boost::bind(&ConcurrentDataSharer::TCPRecv, this));
 	{
-    std::unique_lock<std::mutex> lock(*_TCPLock);
-    while(!TCP_port_chosen){
-        TCP_chosen_cond.wait(lock );
-    }
+		std::unique_lock < std::mutex > lock(*_TCPLock);
+		while (!TCP_port_chosen) {
+			TCP_chosen_cond.wait(lock);
+		}
+	}
+	{
+		std::ostringstream temp;
+		temp << "TCP port " << TCP_recv_port << " chosen";
+		logging_buffer->push_back(temp.str());
+
 	}
 
 	//create my identity
 	_myself = new clientData(_name, getLocalIPV4Adresses(),
-			getLocalIPV6Adresses(),TCP_recv_port);
+			getLocalIPV6Adresses(), TCP_recv_port);
+
+	{
+		std::ostringstream temp;
+		temp << "Name " << _name << " chosen";
+		logging_buffer->push_back(temp.str());
+
+	}
 	_clients[_name] = _myself;
 
 	_mainThread = new boost::thread(
@@ -42,6 +56,8 @@ ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 	_multiRecvThread = new boost::thread(
 			boost::bind(&ConcurrentDataSharer::MultiRecv, this));
 
+	_pingThread = new boost::thread(
+			boost::bind(&ConcurrentDataSharer::pinger, this));
 	//multicast
 	IntroduceMyselfToGroup();
 }
@@ -50,6 +66,11 @@ ConcurrentDataSharer::~ConcurrentDataSharer() {
 }
 
 void ConcurrentDataSharer::IntroduceMyselfToGroup() {
+	{
+		std::ostringstream temp;
+		temp << "IntroduceMyselfToGroup";
+		logging_buffer->push_back(temp.str());
+	}
 	std::ostringstream ss;
 	boost::archive::text_oarchive ar(ss);
 	ar << _myself;
@@ -60,6 +81,11 @@ void ConcurrentDataSharer::IntroduceMyselfToGroup() {
 }
 
 std::vector<std::string> ConcurrentDataSharer::getClients() {
+	{
+		std::ostringstream temp;
+		temp << "getClients";
+		logging_buffer->push_back(temp.str());
+	}
 	std::vector<std::string> clients;
 	_clientLock->lock();
 	for (auto it = _clients.begin(); it != _clients.end(); it++) {
@@ -69,8 +95,17 @@ std::vector<std::string> ConcurrentDataSharer::getClients() {
 	return clients;
 }
 
+std::vector<std::string> ConcurrentDataSharer::getLogger() {
+	return logging_buffer->get_logs();
+}
+
 std::vector<std::string> ConcurrentDataSharer::getClientVariables(
 		std::string const & client) {
+	{
+		std::ostringstream temp;
+		temp << "getClientVariables" << " client: " << client;
+		logging_buffer->push_back(temp.str());
+	}
 	QueueElementTCPSend * toSend = new QueueElementTCPSend(client, "",
 			TCPSENDVARIABLES, true);
 	_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
@@ -85,7 +120,17 @@ std::vector<std::string> ConcurrentDataSharer::getClientVariables(
 
 //runs from mainloop, keep minimal
 void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
+	{
+		std::ostringstream temp;
+		temp << "handleTCPRecv";
+		logging_buffer->push_back(temp.str());
+	}
 	if (QueueElementSet* operation = dynamic_cast<QueueElementSet*>(data)) {
+		{
+			std::ostringstream temp;
+			temp << "handleTCPRecv QueueElementSet";
+			logging_buffer->push_back(temp.str());
+		}
 		if (_dataBase.find(operation->getName()) == _dataBase.end()) {
 			//check all other peers if they have this name
 			_dataBase[operation->getName()] = new DataBaseElement(operation);
@@ -96,6 +141,11 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 		delete data;
 	} else if (QueueElementCallback* operation =
 			dynamic_cast<QueueElementCallback*>(data)) {
+		{
+			std::ostringstream temp;
+			temp << "handleTCPRecv QueueElementCallback";
+			logging_buffer->push_back(temp.str());
+		}
 		if (_dataBase.find(operation->getName()) != _dataBase.end()) {
 			//check all other peers if they have this name
 			_dataBase[operation->getName()]->setCallback(
@@ -105,6 +155,11 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 	}
 
 	else if (QueueElementGet* operation = dynamic_cast<QueueElementGet*>(data)) {
+		{
+			std::ostringstream temp;
+			temp << "handleTCPRecv QueueElementGet";
+			logging_buffer->push_back(temp.str());
+		}
 		if (_dataBase.find(operation->getName()) == _dataBase.end()) {
 			//check all other peers if they have this name
 			operation->setData("");
@@ -114,12 +169,28 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 			operation->setData(element->getData());
 		}
 	}
+	else if(QueueElementSubscribe* operation=dynamic_cast<QueueElementSubscribe*>(data)){
+		QueueElementTCPSend* toSend = new QueueElementTCPSend(
+					operation->getName(), operation->getVar(), TCPSTARTSUBSCRIPTION, false);
+			_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+			delete data;
+	}
 }
 
 void ConcurrentDataSharer::handleQueueElementTCPSend(
 		QueueElementTCPSend* data) {
+	{
+		std::ostringstream temp;
+		temp << "handleQueueElementTCPSend";
+		logging_buffer->push_back(temp.str());
+	}
 	switch (data->getPurpose()) {
 	case TCPSENDVARIABLES: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPSENDVARIABLES";
+			logging_buffer->push_back(temp.str());
+		}
 		std::vector<std::string> variables;
 		for (auto it = _dataBase.begin(); it != _dataBase.end(); it++) {
 			variables.push_back(it->first);
@@ -138,10 +209,16 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		break;
 	}
 	case TCPUNDEFINED: {
+
 		throw std::runtime_error("undefined tcp action");
 		break;
 	}
 	case TCPREPLYVARIABLES: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPREPLYVARIABLES";
+			logging_buffer->push_back(temp.str());
+		}
 		auto it = _requests.find(data->getTag());
 		if (it == _requests.end()) {
 			throw std::runtime_error("request not found");
@@ -152,6 +229,11 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		break;
 	}
 	case TCPPERSONALINTRODUCTION: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPPERSONALINTRODUCTION";
+			logging_buffer->push_back(temp.str());
+		}
 		std::istringstream stream(data->getDataNoneBlocking());
 		boost::archive::text_iarchive archive(stream);
 		clientData* dataReceived = new clientData();
@@ -168,10 +250,18 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		if (newClientCallback != NULL && change) {
 			newClientCallback();
 		}
-
+		QueueElementTCPSend* toSend = new QueueElementTCPSend(
+				data->getRequestor(), "", TCPSENDCLIENTS, false);
+		_TCPSendQueue->Put(toSend);
+		delete data;
 		break;
 	}
 	case TCPGETVARIABLE: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPGETVARIABLE";
+			logging_buffer->push_back(temp.str());
+		}
 		auto it = _dataBase.find(data->getDataNoneBlocking());
 		std::string datafromDatabase = "";
 		if (it != _dataBase.end()) {
@@ -188,6 +278,11 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 	}
 
 	case TCPREPLYGETVARIABLE: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPREPLYGETVARIABLE";
+			logging_buffer->push_back(temp.str());
+		}
 		auto it = _requests.find(data->getTag());
 		if (it == _requests.end()) {
 			throw std::runtime_error("request not found");
@@ -195,6 +290,74 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		it->second->setData(data->getDataNoneBlocking());
 		_requests.erase(it);
 		delete data;
+		break;
+	}
+	case TCPSENDCLIENTS: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPSENDCLIENTS";
+			logging_buffer->push_back(temp.str());
+		}
+		std::ostringstream ss;
+		boost::archive::text_oarchive ar(ss);
+		_clientLock->lock();
+		std::size_t tempSize = _clients.size();
+		ar << tempSize;
+		for (auto it = _clients.begin(); it != _clients.end(); it++) {
+			ar << it->second;
+		}
+		_clientLock->unlock();
+		std::string outbound_data = ss.str();
+		QueueElementTCPSend* toSend = new QueueElementTCPSend(
+				data->getRequestor(), outbound_data, TCPREPLYCLIENTS, false);
+		_TCPSendQueue->Put(toSend);
+		delete data;
+		break;
+	}
+	case TCPREPLYCLIENTS: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPREPLYCLIENTS";
+			logging_buffer->push_back(temp.str());
+		}
+		std::istringstream stream(data->getDataNoneBlocking());
+		boost::archive::text_iarchive archive(stream);
+		std::size_t tempSize;
+		std::vector<clientData*> tempData;
+		archive >> tempSize;
+		//clientData* dataReceived = new clientData();
+		//archive >> dataReceived;
+		for (std::size_t i = 0; i < tempSize; i++) {
+			clientData* tempClientdata = new clientData();
+			archive >> tempClientdata;
+			tempData.push_back(tempClientdata);
+		}
+		_clientLock->lock();
+		for (auto it = tempData.begin(); it != tempData.end(); it++) {
+			if (_clients.find((*it)->getName()) == _clients.end()) {
+				_clients[(*it)->getName()] = *it;
+			} else {
+				delete *it;
+			}
+		}
+		_clientLock->unlock();
+		delete data;
+		break;
+	}
+	case TCPPING:{
+		QueueElementTCPSend* toSend = new QueueElementTCPSend(
+				data->getRequestor(), "", TCPPINGREPLY, false);
+		_TCPSendQueue->Put(toSend);
+		break;
+	}
+	case TCPPINGREPLY:{
+		_clientLock->lock();
+		auto it=_clients.find(data->getRequestor()) ;
+		if (it != _clients.end()) {
+			it->second->last_ping=std::chrono::high_resolution_clock::now();
+			it->second->ping_failure_counter=0;
+		}
+		_clientLock->unlock();
 		break;
 	}
 	default: {
@@ -212,7 +375,11 @@ void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 		break;
 	}
 	case MULTIINTRODUCTION: {
-
+		{
+			std::ostringstream temp;
+			temp << "handleMultiRecv MULTIINTRODUCTION";
+			logging_buffer->push_back(temp.str());
+		}
 		std::istringstream stream(package->getData());
 		boost::archive::text_iarchive archive(stream);
 		clientData* dataReceived = new clientData();
@@ -256,30 +423,80 @@ void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 }
 
 void ConcurrentDataSharer::mainLoop() {
+	logging_buffer->push_back("Main thread started");
 	while (true) {
 		QueueElementBase* data = _recvQueue->Take();
+		logging_buffer->push_back("Main thread working on data");
 
 		if (QueueElementSet* package = dynamic_cast<QueueElementSet*>(data)) {
+			logging_buffer->push_back("Main thread working on QueueElementSet");
 			handleTCPRecv(data);
 		} else if (QueueElementGet* package =
 				dynamic_cast<QueueElementGet*>(data)) {
+			logging_buffer->push_back("Main thread working QueueElementGet");
 			handleTCPRecv(data);
 		} else if (QueueElementCallback* package =
 				dynamic_cast<QueueElementCallback*>(data)) {
+			logging_buffer->push_back(
+					"Main thread working on QueueElementCallback");
 			handleTCPRecv(data);
 		} else if (QueueElementTCPSend* package =
 				dynamic_cast<QueueElementTCPSend*>(data)) {
+			logging_buffer->push_back(
+					"Main thread working on QueueElementTCPSend");
 			handleQueueElementTCPSend(package);
-		}
-
-		else if (QueueElementMultiSend* package =
+		} else if (QueueElementMultiSend* package =
 				dynamic_cast<QueueElementMultiSend*>(data)) {
+			logging_buffer->push_back(
+					"Main thread working on QueueElementMultiSend");
 			handleMultiRecv(data);
 		}
+		else if (QueueElementSubscribe* package =
+						dynamic_cast<QueueElementSubscribe*>(data)) {
+					logging_buffer->push_back(
+							"Main thread working on QueueElementSubscribe");
+					handleTCPRecv(data);
+				}
 
 		else {
 			throw std::runtime_error("no casting in mainloop succesfull");
 		}
+	}
+
+}
+
+void ConcurrentDataSharer::pinger() {
+	logging_buffer->push_back("Ping thread started");
+	while (true) {
+		_clientLock->lock();
+		for (auto it = _clients.begin(); it != _clients.end();) {
+			if(it->first==getMyName()){
+				it++;
+				continue;
+			}
+			QueueElementTCPSend* toSend = new QueueElementTCPSend(it->first, "",
+					TCPPING, false);
+			_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+			auto time_now = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double> diff = time_now
+					- it->second->last_ping;
+			if (diff > std::chrono::milliseconds(PINGTIMEFAILURE)) {
+				it->second->ping_failure_counter += 1;
+			}
+			if(it->second->ping_failure_counter >NRPINGS){
+				{
+					std::ostringstream temp;
+					temp<<"Deleting client "<<it->first<<" because it failed to respond to pings";
+					logging_buffer->push_back(temp.str());
+				}
+				it=_clients.erase(it);
+				continue;
+
+			}
+			it++;
+		}
+		_clientLock->unlock();
+		boost::this_thread::sleep(boost::posix_time::milliseconds(PINGTIME));
 	}
 
 }
@@ -318,38 +535,44 @@ void ConcurrentDataSharer::TCPRecvSession(
 }
 
 void ConcurrentDataSharer::TCPRecv() {
-	for(std::size_t i=0;i<10;i++){
+	for (std::size_t i = 0; i < 10; i++) {
 
-	try{
+		try {
 
-boost::asio::ip::tcp::acceptor acceptor(io_service_TCP_recv,
-			boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
-					TCP_recv_port));
-{
-std::unique_lock<std::mutex> lock(*_TCPLock);
-TCP_port_chosen=true;
-TCP_chosen_cond.notify_all();
-}
-while (true) {
-		boost::shared_ptr<boost::asio::ip::tcp::socket> sock(
-				new boost::asio::ip::tcp::socket(io_service_TCP_recv));
-		acceptor.accept(*sock);
-		boost::thread t(
-				boost::bind(&ConcurrentDataSharer::TCPRecvSession, this, sock));
-	}
-	}
-	catch (boost::exception &e){
-		TCP_recv_port+=1;
-	}
+			boost::asio::ip::tcp::acceptor acceptor(io_service_TCP_recv,
+					boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
+							TCP_recv_port));
+			{
+				std::unique_lock < std::mutex > lock(*_TCPLock);
+				TCP_port_chosen = true;
+				TCP_chosen_cond.notify_all();
+			}
+			while (true) {
+				boost::shared_ptr<boost::asio::ip::tcp::socket> sock(
+						new boost::asio::ip::tcp::socket(io_service_TCP_recv));
+				acceptor.accept(*sock);
+				boost::thread t(
+						boost::bind(&ConcurrentDataSharer::TCPRecvSession, this,
+								sock));
+			}
+		} catch (boost::exception &e) {
+			TCP_recv_port += 1;
+		}
 
-}
+	}
 	throw std::runtime_error("changed adresses to many times");
 }
 
 void ConcurrentDataSharer::TCPSend() {
+	{
+		logging_buffer->push_back("TCPSend thread created");
+	}
 	while (true) {
 		{
 			QueueElementBase* data = _TCPSendQueue->Take();
+			{
+				logging_buffer->push_back("TCPSend working on data");
+			}
 			boost::shared_ptr<boost::asio::ip::tcp::socket> socket_TCP_send(
 					new boost::asio::ip::tcp::socket(io_service_TCP_recv));
 			boost::shared_ptr<boost::asio::ip::tcp::resolver> resolver_TCP(
@@ -370,6 +593,12 @@ void ConcurrentDataSharer::TCPSend() {
 			_clientLock->lock();
 			auto it = _clients.find(operation->getName());
 			if (it == _clients.end()) {
+				{
+					std::ostringstream temp;
+					temp << "TCPSend could not find client"
+							<< operation->getName();
+					logging_buffer->push_back(temp.str());
+				}
 				delete data;
 				_clientLock->unlock();
 				continue;
@@ -378,6 +607,12 @@ void ConcurrentDataSharer::TCPSend() {
 			port << (*it).second->getPort();
 			_clientLock->unlock();
 			if (clientadresses.size() == 0) {
+				{
+					std::ostringstream temp;
+					temp << "TCPSend could not find adresses to "
+							<< operation->getName();
+					logging_buffer->push_back(temp.str());
+				}
 				delete data;
 				continue;
 			}
@@ -412,6 +647,12 @@ void ConcurrentDataSharer::TCPSend() {
 			io_service_send.run();
 			if (!operation->getResponsRequired()) {
 				delete data;
+			}
+			{
+				std::ostringstream temp;
+				temp << "TCPSend sent data to" << operation->getName()
+						<< " with purpose " << operation->getPurpose();
+				logging_buffer->push_back(temp.str());
 			}
 		}
 	}
