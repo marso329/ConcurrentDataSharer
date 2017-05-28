@@ -36,7 +36,10 @@ public:
 		boost::python::list temp;
 		std::vector<std::string> clients=getLogger();
 		for (auto it =clients.begin();it!=clients.end();it++){
-			temp.append(*it);
+			std::string temp_string=*it;
+				//boost::python::str temp_python_string(temp_string);
+				temp.append( handle<>( PyBytes_FromString( temp_string.c_str() ) ) );
+		//	temp.append(*it);
 		}
 		return temp;
 	}
@@ -73,6 +76,33 @@ public:
 		return ((pickler->loads)(object(tempData).attr("encode")()));
 	}
 
+	void subscribePython(std::string const& client,std::string const& var,object func){
+		std::string object_classname = boost::python::extract<std::string>(func.attr("__class__").attr("__name__"));
+		if(object_classname!="function"){
+			throw std::runtime_error("must pass function");
+		}
+		std::function<void(const std::string&)> subFunc =createPythonSubscription(func);
+		QueueElementSubscribe* toSend=new QueueElementSubscribe(client,var,subFunc);
+		_recvQueue->Put(toSend);
+		_subscription[client+var]=subFunc;
+
+	}
+
+	std::function<void(const std::string&)> createPythonSubscription(
+			object) {
+		return [=](const std::string& data) {object(((pickler->loads)(object(data).attr("encode")())));
+			return;};
+	}
+	;
+	void printLogs(){
+		std::vector<std::string> clients=getLogger();
+		for (auto it =clients.begin();it!=clients.end();it++){
+			std::cout<<*it<<std::endl;
+		}
+
+	}
+
+
 
 
 protected:
@@ -87,7 +117,8 @@ BOOST_PYTHON_MODULE(ConcurrentDataSharer)
 		   .def("setValue", &ConcurrentDataSharerPython::setValuePython,
         return_value_policy<reference_existing_object>()).def("getClients",&ConcurrentDataSharerPython::getClientsPython)
 		.def("getClientVariablesList",&ConcurrentDataSharerPython::getClientVariablesListPython).def("getClientVariable",&ConcurrentDataSharerPython::getClientVariableIntPython)
-		.def("getValue",&ConcurrentDataSharerPython::getValuePython).def("getLogs",&ConcurrentDataSharerPython::getLogsPython);
+		.def("getValue",&ConcurrentDataSharerPython::getValuePython).def("getLogs",&ConcurrentDataSharerPython::getLogsPython)
+		.def("subscribe",&ConcurrentDataSharerPython::subscribePython).def("printLogs",&ConcurrentDataSharerPython::printLogs).def("getName",&ConcurrentDataSharerPython::getMyName);
 
 }
 

@@ -377,7 +377,7 @@ private:
 	logger* logging_buffer;
 
 	//for subscriptions
-	std::unordered_map<std::string, std::function<void(const std::string&)>> _subscription;
+protected:std::unordered_map<std::string, std::function<void(const std::string&)>> _subscription;
 
 
 };

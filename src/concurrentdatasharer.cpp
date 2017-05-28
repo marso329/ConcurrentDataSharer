@@ -137,7 +137,16 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 		} else {
 			_dataBase[operation->getName()]->setData(operation->getData());
 			_dataBase[operation->getName()]->runCallback();
+			std::vector<std::string> subscribers =
+					_dataBase[operation->getName()]->subscribers;
+			for (auto it = subscribers.begin(); it != subscribers.end(); it++) {
+				QueueElementTCPSend* toSend = new QueueElementTCPSend(*it,
+						operation->getData(), TCPSUBSCRIPTION, false);
+				toSend->setTag(operation->getName());
+				_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+			}
 		}
+
 		delete data;
 	} else if (QueueElementCallback* operation =
 			dynamic_cast<QueueElementCallback*>(data)) {
@@ -168,22 +177,24 @@ void ConcurrentDataSharer::handleTCPRecv(QueueElementBase* data) {
 			DataBaseElement* element = _dataBase[operation->getName()];
 			operation->setData(element->getData());
 		}
-	}
-	else if(QueueElementSubscribe* operation=dynamic_cast<QueueElementSubscribe*>(data)){
+	} else if (QueueElementSubscribe* operation =
+			dynamic_cast<QueueElementSubscribe*>(data)) {
+		{
+			std::ostringstream temp;
+			temp << "handleTCPRecv QueueElementSubscribe";
+			logging_buffer->push_back(temp.str());
+		}
+
 		QueueElementTCPSend* toSend = new QueueElementTCPSend(
-					operation->getName(), operation->getVar(), TCPSTARTSUBSCRIPTION, false);
-			_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
-			delete data;
+				operation->getName(), operation->getVar(), TCPSTARTSUBSCRIPTION,
+				false);
+		_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+		delete data;
 	}
 }
 
 void ConcurrentDataSharer::handleQueueElementTCPSend(
 		QueueElementTCPSend* data) {
-	{
-		std::ostringstream temp;
-		temp << "handleQueueElementTCPSend";
-		logging_buffer->push_back(temp.str());
-	}
 	switch (data->getPurpose()) {
 	case TCPSENDVARIABLES: {
 		{
@@ -344,20 +355,60 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		delete data;
 		break;
 	}
-	case TCPPING:{
+	case TCPPING: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPPING";
+			logging_buffer->push_back(temp.str());
+		}
 		QueueElementTCPSend* toSend = new QueueElementTCPSend(
 				data->getRequestor(), "", TCPPINGREPLY, false);
 		_TCPSendQueue->Put(toSend);
 		break;
 	}
-	case TCPPINGREPLY:{
+	case TCPPINGREPLY: {
 		_clientLock->lock();
-		auto it=_clients.find(data->getRequestor()) ;
+		auto it = _clients.find(data->getRequestor());
 		if (it != _clients.end()) {
-			it->second->last_ping=std::chrono::high_resolution_clock::now();
-			it->second->ping_failure_counter=0;
+			it->second->last_ping = std::chrono::high_resolution_clock::now();
+			it->second->ping_failure_counter = 0;
 		}
 		_clientLock->unlock();
+		break;
+	}
+	case TCPSTARTSUBSCRIPTION: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPSTARTSUBSCRIPTION";
+			logging_buffer->push_back(temp.str());
+		}
+		auto it1 = _dataBase.find(data->getDataNoneBlocking());
+		bool client_exists = false;
+		_clientLock->lock();
+		auto it = _clients.find(data->getRequestor());
+		if (it != _clients.end()) {
+			client_exists = true;
+		}
+		_clientLock->unlock();
+		if (it1 != _dataBase.end() && client_exists) {
+			it1->second->subscribers.push_back(data->getRequestor());
+		}
+		delete data;
+		//_dataBase.
+
+		break;
+	}
+	case TCPSUBSCRIPTION: {
+		{
+			std::ostringstream temp;
+			temp << "handleQueueElementTCPSend TCPSUBSCRIPTION";
+			logging_buffer->push_back(temp.str());
+		}
+		auto it = _subscription.find(data->getRequestor() + data->getTag());
+		if (it != _subscription.end()) {
+			_subscription[data->getRequestor() + data->getTag()](
+					data->getDataNoneBlocking());
+		}
 		break;
 	}
 	default: {
@@ -426,7 +477,6 @@ void ConcurrentDataSharer::mainLoop() {
 	logging_buffer->push_back("Main thread started");
 	while (true) {
 		QueueElementBase* data = _recvQueue->Take();
-		logging_buffer->push_back("Main thread working on data");
 
 		if (QueueElementSet* package = dynamic_cast<QueueElementSet*>(data)) {
 			logging_buffer->push_back("Main thread working on QueueElementSet");
@@ -442,21 +492,18 @@ void ConcurrentDataSharer::mainLoop() {
 			handleTCPRecv(data);
 		} else if (QueueElementTCPSend* package =
 				dynamic_cast<QueueElementTCPSend*>(data)) {
-			logging_buffer->push_back(
-					"Main thread working on QueueElementTCPSend");
 			handleQueueElementTCPSend(package);
 		} else if (QueueElementMultiSend* package =
 				dynamic_cast<QueueElementMultiSend*>(data)) {
 			logging_buffer->push_back(
 					"Main thread working on QueueElementMultiSend");
 			handleMultiRecv(data);
+		} else if (QueueElementSubscribe* package =
+				dynamic_cast<QueueElementSubscribe*>(data)) {
+			logging_buffer->push_back(
+					"Main thread working on QueueElementSubscribe");
+			handleTCPRecv(data);
 		}
-		else if (QueueElementSubscribe* package =
-						dynamic_cast<QueueElementSubscribe*>(data)) {
-					logging_buffer->push_back(
-							"Main thread working on QueueElementSubscribe");
-					handleTCPRecv(data);
-				}
 
 		else {
 			throw std::runtime_error("no casting in mainloop succesfull");
@@ -470,7 +517,7 @@ void ConcurrentDataSharer::pinger() {
 	while (true) {
 		_clientLock->lock();
 		for (auto it = _clients.begin(); it != _clients.end();) {
-			if(it->first==getMyName()){
+			if (it->first == getMyName()) {
 				it++;
 				continue;
 			}
@@ -482,14 +529,21 @@ void ConcurrentDataSharer::pinger() {
 					- it->second->last_ping;
 			if (diff > std::chrono::milliseconds(PINGTIMEFAILURE)) {
 				it->second->ping_failure_counter += 1;
-			}
-			if(it->second->ping_failure_counter >NRPINGS){
 				{
 					std::ostringstream temp;
-					temp<<"Deleting client "<<it->first<<" because it failed to respond to pings";
+					temp << "Client " << it->first
+							<< " failed to respond to ping";
 					logging_buffer->push_back(temp.str());
 				}
-				it=_clients.erase(it);
+			}
+			if (it->second->ping_failure_counter > NRPINGS) {
+				{
+					std::ostringstream temp;
+					temp << "Deleting client " << it->first
+							<< " because it failed to respond to pings";
+					logging_buffer->push_back(temp.str());
+				}
+				it = _clients.erase(it);
 				continue;
 
 			}
@@ -497,6 +551,7 @@ void ConcurrentDataSharer::pinger() {
 		}
 		_clientLock->unlock();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(PINGTIME));
+logging_buffer->push_back("ping");
 	}
 
 }
@@ -570,9 +625,6 @@ void ConcurrentDataSharer::TCPSend() {
 	while (true) {
 		{
 			QueueElementBase* data = _TCPSendQueue->Take();
-			{
-				logging_buffer->push_back("TCPSend working on data");
-			}
 			boost::shared_ptr<boost::asio::ip::tcp::socket> socket_TCP_send(
 					new boost::asio::ip::tcp::socket(io_service_TCP_recv));
 			boost::shared_ptr<boost::asio::ip::tcp::resolver> resolver_TCP(
@@ -648,7 +700,8 @@ void ConcurrentDataSharer::TCPSend() {
 			if (!operation->getResponsRequired()) {
 				delete data;
 			}
-			{
+			if (operation->getPurpose() != TCPPINGREPLY
+					&& operation->getPurpose() != TCPPING) {
 				std::ostringstream temp;
 				temp << "TCPSend sent data to" << operation->getName()
 						<< " with purpose " << operation->getPurpose();

@@ -273,6 +273,7 @@ public:
 			callback();
 		}
 	}
+	std::vector<std::string> subscribers;
 protected:
 private:
 	std::string _name;
