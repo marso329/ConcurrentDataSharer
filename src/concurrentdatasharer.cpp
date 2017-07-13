@@ -406,8 +406,7 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		}
 		auto it = _subscription.find(data->getRequestor() + data->getTag());
 		if (it != _subscription.end()) {
-			_subscription[data->getRequestor() + data->getTag()](
-					data->getDataNoneBlocking());
+			_subscription[data->getRequestor() + data->getTag()]->new_value(data->getDataNoneBlocking());
 		}
 		break;
 	}

@@ -8,6 +8,7 @@
 #include <mutex>
 #include <chrono>
 #include <functional>
+#include <queue>
 
 //boost includes
 #include <boost/archive/text_oarchive.hpp>
@@ -19,11 +20,86 @@
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/circular_buffer.hpp>
+#include <boost/thread.hpp>
 
 //my includes
 #include "constants.h"
 
 typedef void (*CallbackSig)();
+
+
+
+class Subscription{
+public:
+	Subscription(){};
+	virtual void new_value(std::string const& value)=0;
+	virtual void end_subscription()=0;
+	virtual ~Subscription(){};
+
+};
+
+template<typename T>
+class SubscriptionContainer:public Subscription {
+public:
+	SubscriptionContainer(std::string const& client, std::string const& name,
+			 std::function<void(T)> SubscribeFunc,
+			bool skip_conversion=false) :
+			_name(name), _client(client), _SubscribeFunc(SubscribeFunc), kill(
+					false),_skip_conversion(skip_conversion) {
+		_subThread = new boost::thread(
+				boost::bind(&SubscriptionContainer::thread_function, this));
+	}
+	;
+	void new_value(std::string const& value) {
+		data.push(value);
+		{
+			std::lock_guard < std::mutex > lk(m);
+		}
+		cv.notify_one();
+	}
+	;
+	void end_subscription() {
+		data.push("");
+		kill = true;
+		{
+			std::lock_guard < std::mutex > lk(m);
+		}
+		cv.notify_one();
+
+	}
+protected:
+private:
+	void thread_function() {
+		while (true) {
+			std::unique_lock < std::mutex > lk(m);
+			cv.wait_for(lk, std::chrono::milliseconds(1000),
+					[this] {return !data.empty();});
+			if(kill){
+				return;
+			}
+			while (!data.empty()) {
+					std::istringstream ar(data.front());
+					data.pop();
+					boost::archive::text_iarchive ia(ar);
+					T returnData;
+					ia >> returnData;
+					_SubscribeFunc(returnData);
+				}
+
+		}
+	}
+	std::condition_variable cv;
+	std::mutex m;
+	std::queue<std::string> data;
+	std::string _client;
+	std::string _name;
+	std::function<void(T)> _SubscribeFunc;
+	bool kill;
+	bool _skip_conversion;
+	boost::thread* _subThread;
+
+};
+
 
 class logger {
 public:
@@ -231,19 +307,18 @@ private:
 protected:
 };
 
-
-
 class QueueElementSubscribe: public QueueElementBase {
 public:
-	QueueElementSubscribe(std::string const& client,std::string const& var,std::function<void(const std::string&)> func) {
+	QueueElementSubscribe(std::string const& client, std::string const& var,
+			std::function<void(const std::string&)> func) {
 		_name = client;
 		callback = func;
-		variable=var;
+		variable = var;
 	}
-	std::function<void(const std::string&)>  getCallback() {
+	std::function<void(const std::string&)> getCallback() {
 		return callback;
 	}
-	std::string getVar(){
+	std::string getVar() {
 		return variable;
 	}
 	~QueueElementSubscribe() {
@@ -286,26 +361,26 @@ class clientData {
 public:
 	clientData() :
 			_TCP_port(0) {
-		last_ping=std::chrono::high_resolution_clock::now();
+		last_ping = std::chrono::high_resolution_clock::now();
 	}
 	;
 	clientData(std::string name, std::vector<std::string> IPV4,
 			std::vector<std::string> IPV6, short unsigned TCP_port) :
 			_name(name), IPV4Adresses(IPV4), IPV6Adresses(IPV6), _TCP_port(
 					TCP_port) {
-		last_ping=std::chrono::high_resolution_clock::now();
+		last_ping = std::chrono::high_resolution_clock::now();
 	}
 	;
 	clientData(const clientData& data) :
 			_name(data._name), IPV4Adresses(data.IPV4Adresses), IPV6Adresses(
 					data.IPV6Adresses), _TCP_port(data._TCP_port) {
-		last_ping=std::chrono::high_resolution_clock::now();
+		last_ping = std::chrono::high_resolution_clock::now();
 	}
 
 	clientData(const clientData* data) :
 			_name(data->_name), IPV4Adresses(data->IPV4Adresses), IPV6Adresses(
 					data->IPV6Adresses), _TCP_port(data->_TCP_port) {
-		last_ping=std::chrono::high_resolution_clock::now();
+		last_ping = std::chrono::high_resolution_clock::now();
 	}
 
 	std::vector<std::string> getIPV4() {
@@ -324,7 +399,7 @@ public:
 	}
 	;
 	std::chrono::time_point<std::chrono::high_resolution_clock> last_ping;
-	std::size_t ping_failure_counter=0;
+	std::size_t ping_failure_counter = 0;
 protected:
 private:
 	friend class boost::serialization::access;

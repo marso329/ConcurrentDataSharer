@@ -35,6 +35,7 @@
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include <boost/exception/all.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/function.hpp>
 
 //own includes
 #include "structures.h"
@@ -125,7 +126,7 @@ public:
 		std::function<void(const std::string&)> func =createSubscription<T>(SubscribeFunc);
 		QueueElementSubscribe* toSend=new QueueElementSubscribe(client,name,func);
 		_recvQueue->Put(toSend);
-		_subscription[client+name]=func;
+		_subscription[client+name]=new SubscriptionContainer<T>(client,name,SubscribeFunc);
 
 
 	}
@@ -377,7 +378,7 @@ private:
 	logger* logging_buffer;
 
 	//for subscriptions
-protected:std::unordered_map<std::string, std::function<void(const std::string&)>> _subscription;
+protected:std::unordered_map<std::string,Subscription*> _subscription;
 
 
 };
