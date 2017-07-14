@@ -82,22 +82,11 @@ private:
 			std::string temp = data.front();
 			data.pop();
 			state = PyGILState_Ensure();
-			std::cout << "received lock" << std::endl;
 			try{
 			_SubscribeFunc(temp);
 			}
 			catch (error_already_set& e) {
-				PyObject *ptype, *pvalue, *ptraceback;
-				    PyErr_Fetch(&ptype, &pvalue, &ptraceback);
-
-				    handle<> hType(ptype);
-				    object extype(hType);
-				    handle<> hTraceback(ptraceback);
-				    object traceback(hTraceback);
-
-				    //Extract error message
-				    std::string strErrorMessage = extract<std::string>(pvalue);
-				    std::cout<<strErrorMessage<<std::endl;
+				PyErr_Print();
 			}
 			PyGILState_Release(state);
 		}
@@ -205,26 +194,27 @@ public:
 			object func) {
 		std::string object_classname = boost::python::extract<std::string>(
 				func.attr("__class__").attr("__name__"));
+
+		std::string object_funcname = boost::python::extract<std::string>(
+				func.attr("__name__"));
 		if (object_classname != "function") {
 			throw std::runtime_error("must pass function");
 		}
 		//create subscription function that converts std::string to object
 		std::function<void(std::string)> subFunc = createPythonSubscription(
-				func);
+				object_funcname);
 		//start a subscription
 		QueueElementSubscribe* toSend = new QueueElementSubscribe(client, var,
 				subFunc);
-		//create a new subscriptioncontainer that creates a thread for executing python code
-		//PyThreadState *_save;
-		//_save = PyEval_SaveThread();
+		PyGILState_STATE state = PyGILState_Ensure();
 		_subscription[client + var] = new SubscriptionContainerPython<
 				std::string>(client, var, subFunc, true);
-
+		PyGILState_Release(state);
 		_recvQueue->Put(toSend);
 
 	}
-	std::function<void(std::string)> createPythonSubscription(object func) {
-		return [&](std::string data) {object main1 = import("__main__");};
+	std::function<void(std::string)> createPythonSubscription(const std::string func) {
+		return [&,func](std::string data) {main_namespace[func](((pickler->loads)(object(data).attr("encode")())));};
 	}
 	;
 	void printLogs() {
