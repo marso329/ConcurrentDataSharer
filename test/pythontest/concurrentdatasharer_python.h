@@ -5,6 +5,7 @@
 #include "concurrentdatasharer.h"
 #include <boost/python/list.hpp>
 #include <boost/python/call.hpp>
+#include <boost/shared_ptr.hpp>
 using namespace boost::python;
 
 struct Pickler {
@@ -197,9 +198,12 @@ public:
 
 		std::string object_funcname = boost::python::extract<std::string>(
 				func.attr("__name__"));
-		if (object_classname != "function") {
-			throw std::runtime_error("must pass function");
+		//if (object_classname != "function" &&object_classname!="method") {
+		if(!PyCallable_Check(func.ptr())){
+			throw std::runtime_error("must pass function not"+object_classname);
 		}
+		object_funcname=generateRandomName(20);
+		main_namespace[object_funcname]=func;
 		//create subscription function that converts std::string to object
 		std::function<void(std::string)> subFunc = createPythonSubscription(
 				object_funcname);

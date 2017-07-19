@@ -1,5 +1,11 @@
 from ConcurrentDataSharer import ConcurrentDataSharer
 import time
+class testClass:
+	var=10
+	def __init__(self):
+		pass
+	def testFunc(self,data):
+		print(data)
 test=ConcurrentDataSharer("test")
 time.sleep(1)
 test1=ConcurrentDataSharer("test")
@@ -9,7 +15,8 @@ time.sleep(1)
 name=test.getName()
 def sub(data):
 	print(data)
-test1.subscribe(name,"hello",sub)
+temp=testClass()
+test1.subscribe(name,"hello",temp.testFunc)
 print("subscription setup")
 time.sleep(3)
 test.setValue("hello","olleh")

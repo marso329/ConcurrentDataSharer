@@ -191,15 +191,15 @@ protected:
 	BlockingQueue<QueueElementBase*>* _recvQueue;
 	/// queue used to send QueueElementTCPSend elements to _TCPSendThread
 	BlockingQueue<QueueElementBase*>* _TCPSendQueue;
-private:
-	/** \brief deleted default constructor
-	 */
-	ConcurrentDataSharer();
 	/** \brief generate a random string
 	 * \param len the length of the random string
 	 * \return  a random string
 	 */
 	std::string generateRandomName(std::size_t len);
+private:
+	/** \brief deleted default constructor
+	 */
+	ConcurrentDataSharer();
 
 	template<typename T>
 	std::function<void(const std::string&)> createSubscription(
