@@ -10,4 +10,6 @@ const int PINGTIMEFAILURE=2000;
 
 const int NRPINGS=10;
 
+const int SECONDSCHECKNAME=1;
+
 #endif

@@ -9,6 +9,7 @@
 #include <chrono>
 #include <functional>
 #include <queue>
+#include <stdexcept>
 
 //boost includes
 #include <boost/archive/text_oarchive.hpp>
@@ -35,6 +36,14 @@ public:
 	virtual void new_value(std::string const& value)=0;
 	virtual void end_subscription()=0;
 	virtual ~Subscription(){};
+
+};
+
+class ConcurrentDataSharerException:public std::runtime_error{
+public:
+	ConcurrentDataSharerException(const std::string& what): std::runtime_error(what){
+
+	}
 
 };
 
@@ -161,7 +170,7 @@ protected:
 };
 
 enum MultiSend {
-	MULTIUNDEFINED, MULTIINTRODUCTION
+	MULTIUNDEFINED, MULTIINTRODUCTION,MULTICHECKNAME
 };
 
 class QueueElementMultiSend: public QueueElementBase {
@@ -195,18 +204,22 @@ enum TCPSend {
 	TCPPING,
 	TCPPINGREPLY,
 	TCPSTARTSUBSCRIPTION,
-	TCPSUBSCRIPTION
+	TCPSUBSCRIPTION,
+	TCPNAMETAKEN
 };
 
+class clientData;
 class QueueElementTCPSend: public QueueElementBase {
 public:
 	QueueElementTCPSend(std::string const& name, std::string const& data,
-			TCPSend purpose, bool respons) :
+			TCPSend purpose, bool respons,bool builtin_client=false) :
 			_responsRequired(respons) {
 		_name = name;
 		_data = data;
 		_purpose = purpose;
 		_tag = "";
+		_builtin_client=builtin_client;
+		_client=NULL;
 
 	}
 	QueueElementTCPSend() :
@@ -215,8 +228,19 @@ public:
 		_data = "";
 		_purpose = TCPUNDEFINED;
 		_tag = "";
+		_builtin_client=false;
+		_client=NULL;
 	}
 	;
+	bool builtinClient(){
+		return _builtin_client;
+	}
+	clientData* getClient(){
+		return _client;
+	}
+	void setClient(clientData* client){
+		_client=client;
+	}
 	void setTag(std::string const& tag) {
 		_tag = tag;
 	}
@@ -274,6 +298,8 @@ private:
 	std::condition_variable cv;
 	bool ready = false;
 	std::mutex m;
+	clientData* _client;
+	bool _builtin_client;
 protected:
 };
 

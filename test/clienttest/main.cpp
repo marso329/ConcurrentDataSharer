@@ -7,7 +7,7 @@ void newClient() {
 }
 
 int main(int argc, char ** argv) {
-	ConcurrentDataSharer* sharer = new ConcurrentDataSharer("test");
+	ConcurrentDataSharer* sharer = new ConcurrentDataSharer("test",ConcurrentDataSharer::default_multicastadress,ConcurrentDataSharer::default_listenadress,ConcurrentDataSharer::default_multicastport);
 
 	std::cout<<"My name is : "<<sharer->getMyName()<<" and i want a list of a nother clients variable"<<std::endl;
 

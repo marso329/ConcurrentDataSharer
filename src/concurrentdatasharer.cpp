@@ -1,11 +1,22 @@
 #include <concurrentdatasharer.h>
+
+const std::string ConcurrentDataSharer::default_multicastadress="239.255.0.1";
+const std::string ConcurrentDataSharer::default_listenadress="0.0.0.0";
+const short ConcurrentDataSharer::default_multicastport=30001;
 ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 		std::string const& multicastadress, std::string const & listenadress,
 		const short multicastport) :
+		ConcurrentDataSharer(groupName, generateRandomName(10), multicastadress,
+				listenadress, multicastport) {
+}
+
+ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
+		std::string const& name, std::string const& multicastadress,
+		std::string const & listenadress, const short multicastport) :
 		_groupName(groupName), multicast_address(
 				boost::asio::ip::address::from_string(multicastadress)), listen_address(
 				boost::asio::ip::address::from_string(listenadress)), multicast_port(
-				multicastport), _name(generateRandomName(10)) {
+				multicastport), _name(name) {
 	logging_buffer = new logger();
 	logging_buffer->push_back("Created instance");
 	_multiSendQueue = new BlockingQueue<QueueElementBase*>(255);
@@ -18,6 +29,10 @@ ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 
 	_TCPLock = new std::mutex();
 	TCP_port_chosen = false;
+
+	//for checking name
+	_NameLock = new std::mutex();
+	name_taken=false;
 
 	//let it find a good port
 	_TCPRecvThread = new boost::thread(
@@ -49,18 +64,12 @@ ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 
 	_mainThread = new boost::thread(
 			boost::bind(&ConcurrentDataSharer::mainLoop, this));
-	_TCPSendThread = new boost::thread(
-			boost::bind(&ConcurrentDataSharer::TCPSend, this));
 	_multiSendThread = new boost::thread(
 			boost::bind(&ConcurrentDataSharer::MultiSend, this));
-	_multiRecvThread = new boost::thread(
-			boost::bind(&ConcurrentDataSharer::MultiRecv, this));
-
-	_pingThread = new boost::thread(
-			boost::bind(&ConcurrentDataSharer::pinger, this));
-	//multicast
-	IntroduceMyselfToGroup();
+	_checkName = new boost::thread(
+			boost::bind(&ConcurrentDataSharer::CheckName, this));
 }
+
 ConcurrentDataSharer::~ConcurrentDataSharer() {
 
 }
@@ -78,6 +87,39 @@ void ConcurrentDataSharer::IntroduceMyselfToGroup() {
 	QueueElementMultiSend* data = new QueueElementMultiSend(_name,
 			outbound_data, MULTIINTRODUCTION);
 	_multiSendQueue->Put(dynamic_cast<QueueElementBase*>(data));
+}
+
+void ConcurrentDataSharer::CheckName() {
+	{
+		std::ostringstream temp;
+		temp << "CheckName";
+		logging_buffer->push_back(temp.str());
+	}
+	std::ostringstream ss;
+	boost::archive::text_oarchive ar(ss);
+	ar << _myself;
+	std::string outbound_data = ss.str();
+	QueueElementMultiSend* data = new QueueElementMultiSend(_name,
+			outbound_data, MULTICHECKNAME);
+	_multiSendQueue->Put(dynamic_cast<QueueElementBase*>(data));
+
+	//Wait long enough for response
+	boost::this_thread::sleep_for(boost::chrono::seconds(SECONDSCHECKNAME));
+	_NameLock->lock();
+	bool taken=name_taken;
+	_NameLock->unlock();
+	if (!taken) {
+		_TCPSendThread = new boost::thread(
+				boost::bind(&ConcurrentDataSharer::TCPSend, this));
+		_multiRecvThread = new boost::thread(
+				boost::bind(&ConcurrentDataSharer::MultiRecv, this));
+		_pingThread = new boost::thread(
+				boost::bind(&ConcurrentDataSharer::pinger, this));
+		//multicast
+		IntroduceMyselfToGroup();
+	} else {
+		throw ConcurrentDataSharerException("Name already taken");
+	}
 }
 
 std::vector<std::string> ConcurrentDataSharer::getClients() {
@@ -406,8 +448,14 @@ void ConcurrentDataSharer::handleQueueElementTCPSend(
 		}
 		auto it = _subscription.find(data->getRequestor() + data->getTag());
 		if (it != _subscription.end()) {
-			_subscription[data->getRequestor() + data->getTag()]->new_value(data->getDataNoneBlocking());
+			_subscription[data->getRequestor() + data->getTag()]->new_value(
+					data->getDataNoneBlocking());
 		}
+		break;
+	} case TCPNAMETAKEN:{
+		_NameLock->lock();
+		name_taken=true;
+		_NameLock->unlock();
 		break;
 	}
 	default: {
@@ -461,6 +509,40 @@ void ConcurrentDataSharer::handleMultiRecv(QueueElementBase* data) {
 			delete dataReceived;
 		}
 
+		break;
+	}
+	case MULTICHECKNAME: {
+		{
+			std::ostringstream temp;
+			temp << "handleMultiRecv MULTICHECKNAME";
+			logging_buffer->push_back(temp.str());
+		}
+		std::istringstream stream(package->getData());
+		boost::archive::text_iarchive archive(stream);
+		clientData* dataReceived = new clientData();
+		archive >> dataReceived;
+
+		bool taken = false;
+		_clientLock->lock();
+		if (_clients.find(dataReceived->getName()) != _clients.end()) {
+			taken = true;
+		}
+		_clientLock->unlock();
+		if (taken) {
+			std::ostringstream ss;
+			boost::archive::text_oarchive ar(ss);
+			bool temp=true;
+			ar << temp;
+			std::string outbound_data = ss.str();
+			QueueElementTCPSend* toSend = new QueueElementTCPSend(
+					dataReceived->getName(), outbound_data, TCPNAMETAKEN, false,
+					true);
+			toSend->setClient(dataReceived);
+			_TCPSendQueue->Put(dynamic_cast<QueueElementBase*>(toSend));
+		}
+		else{
+			delete dataReceived;
+		}
 		break;
 	}
 	default: {
@@ -550,7 +632,7 @@ void ConcurrentDataSharer::pinger() {
 		}
 		_clientLock->unlock();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(PINGTIME));
-logging_buffer->push_back("ping");
+		logging_buffer->push_back("ping");
 	}
 
 }
@@ -641,22 +723,38 @@ void ConcurrentDataSharer::TCPSend() {
 
 			}
 			std::ostringstream port;
-			_clientLock->lock();
-			auto it = _clients.find(operation->getName());
-			if (it == _clients.end()) {
-				{
+			std::vector<std::string> clientadresses;
+			if (!operation->builtinClient()) {
+				_clientLock->lock();
+				auto it = _clients.find(operation->getName());
+				if (it == _clients.end()) {
+					{
+						std::ostringstream temp;
+						temp << "TCPSend could not find client"
+								<< operation->getName();
+						logging_buffer->push_back(temp.str());
+					}
+					delete data;
+					_clientLock->unlock();
+					continue;
+				}
+				clientadresses = (*it).second->getIPV4();
+				port << (*it).second->getPort();
+				_clientLock->unlock();
+			} else {
+				clientData* temp_client = operation->getClient();
+				if (temp_client == NULL) {
 					std::ostringstream temp;
-					temp << "TCPSend could not find client"
+					temp << "TCPSend could not find adresses to "
 							<< operation->getName();
 					logging_buffer->push_back(temp.str());
+					delete data;
+					continue;
 				}
-				delete data;
-				_clientLock->unlock();
-				continue;
+				clientadresses = temp_client->getIPV4();
+				port << temp_client->getPort();
+
 			}
-			std::vector<std::string> clientadresses = (*it).second->getIPV4();
-			port << (*it).second->getPort();
-			_clientLock->unlock();
 			if (clientadresses.size() == 0) {
 				{
 					std::ostringstream temp;

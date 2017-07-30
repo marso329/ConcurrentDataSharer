@@ -114,12 +114,8 @@ std::ostream& operator<<(std::ostream& os, const boost::python::object& o) {
 
 class ConcurrentDataSharerPython: public ConcurrentDataSharer {
 public:
-	ConcurrentDataSharerPython(std::string const & groupname,
-			std::string const & multicastadress = "239.255.0.1",
-			std::string const & listenadress = "0.0.0.0",
-			const short multicastport = 30001) :
-			ConcurrentDataSharer(groupname, multicastadress, listenadress,
-					multicastport) {
+	ConcurrentDataSharerPython(std::string const & groupname) :
+			ConcurrentDataSharer(groupname,ConcurrentDataSharer::default_multicastadress,ConcurrentDataSharer::default_listenadress,ConcurrentDataSharer::default_multicastport) {
 		//Py_Initialize();
 		main = import("__main__");
 		main_namespace = main.attr("__dict__");
@@ -130,6 +126,20 @@ public:
 		threadState = PyGILState_GetThisThreadState();
 	}
 	;
+	ConcurrentDataSharerPython(std::string const & groupname,std::string const& name) :
+			ConcurrentDataSharer(groupname,name,ConcurrentDataSharer::default_multicastadress,ConcurrentDataSharer::default_listenadress,ConcurrentDataSharer::default_multicastport) {
+		//Py_Initialize();
+		main = import("__main__");
+		main_namespace = main.attr("__dict__");
+		pickler = new Pickler();
+		pickler->module = object(handle<>(PyImport_ImportModule("pickle")));
+		pickler->dumps = pickler->module.attr("dumps");
+		pickler->loads = pickler->module.attr("loads");
+		threadState = PyGILState_GetThisThreadState();
+	}
+	;
+
+
 	boost::python::list getClientsPython() {
 		boost::python::list temp;
 		std::vector<std::string> clients = getClients();
@@ -242,9 +252,8 @@ BOOST_PYTHON_MODULE(ConcurrentDataSharer)
 	Py_Initialize();
 	PyEval_InitThreads();
 	class_<ConcurrentDataSharerPython, boost::noncopyable>(
-			"ConcurrentDataSharer",
-			init<std::string, std::string, std::string, const short>()).def(
-			init<std::string>()).def("setValue",
+			"ConcurrentDataSharer",init<std::string>()).def(
+							init<std::string,std::string>()).def("setValue",
 			&ConcurrentDataSharerPython::setValuePython,
 			return_value_policy<reference_existing_object>()).def("getClients",
 			&ConcurrentDataSharerPython::getClientsPython).def(

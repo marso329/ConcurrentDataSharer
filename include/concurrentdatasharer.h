@@ -20,6 +20,7 @@
 #include <mutex>
 #include <unordered_map>
 #include <functional>
+#include <chrono>
 
 //boost includes
 #include <boost/archive/tmpdir.hpp>
@@ -36,6 +37,7 @@
 #include <boost/exception/all.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/function.hpp>
+#include <boost/chrono.hpp>
 
 //own includes
 #include "structures.h"
@@ -77,9 +79,20 @@ public:
 	 * \param multicastport the port for UDP broadcasting, default is 30001
 	 */
 	ConcurrentDataSharer(std::string const & groupname,
-			std::string const & multicastadress = "239.255.0.1",
-			std::string const & listenadress = "0.0.0.0",
-			const short multicastport = 30001);
+			std::string const & multicastadress,
+			std::string const & listenadress,
+			const short multicastport);
+
+	/** \brief Constructor
+	 * \param groupname the name for the ConcurrentDatasharer group to share data with
+	 * \param 	multicastadress the adress for UDP broadcasting, default is 239.255.0.1
+	 * \param 	listenadress the adress for UDP broadcasting listening, default is 0.0.0.0
+	 * \param multicastport the port for UDP broadcasting, default is 30001
+	 */
+	ConcurrentDataSharer(std::string const & groupname,std::string const & name,
+			std::string const & multicastadress ,
+			std::string const & listenadress ,
+			const short multicastport);
 
 	/** \brief Destructor
 	 *
@@ -264,6 +277,10 @@ private:
 	 */
 	void IntroduceMyselfToGroup();
 
+	/** \brief Target for initial thread which checks if the name is taken
+	 */
+	void CheckName();
+
 	//handle functions
 
 	/** \brief used in the mainloop to handle TCP packages
@@ -323,6 +340,8 @@ private:
 	boost::thread* _multiSendThread;
 	///thread used to receive UDP packages
 	boost::thread* _multiRecvThread;
+	///Initial thread used to check if name is taken
+	boost::thread* _checkName;
 	///the database storing local variables
 	std::unordered_map<std::string, DataBaseElement*> _dataBase;
 	///thread handling pinging
@@ -360,6 +379,11 @@ private:
 	bool TCP_port_chosen;
 	std::condition_variable TCP_chosen_cond;
 
+
+//Check name
+	std::mutex* _NameLock;
+	bool name_taken;
+
 //request connection
 	///map for request send to other clients
 	std::unordered_map<std::string, QueueElementTCPSend*> _requests;
@@ -380,6 +404,10 @@ private:
 	//for subscriptions
 protected:std::unordered_map<std::string,Subscription*> _subscription;
 
+//static shit
+public: static const std::string default_multicastadress;
+public:static const std::string default_listenadress;
+public:static const short default_multicastport;
 
 };
 #endif

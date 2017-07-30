@@ -7,9 +7,9 @@ void sub(int data){
 }
 
 int main(int argc, char ** argv) {
-	ConcurrentDataSharer* sharer = new ConcurrentDataSharer("test");
+	ConcurrentDataSharer* sharer = new ConcurrentDataSharer("test",ConcurrentDataSharer::default_multicastadress,ConcurrentDataSharer::default_listenadress,ConcurrentDataSharer::default_multicastport);
 	sleep(1);
-	ConcurrentDataSharer* subscriber = new ConcurrentDataSharer("test");
+	ConcurrentDataSharer* subscriber = new ConcurrentDataSharer("test",ConcurrentDataSharer::default_multicastadress,ConcurrentDataSharer::default_listenadress,ConcurrentDataSharer::default_multicastport);
 
 	sharer->set<int>("data",1234);
 	std::string sharerName=sharer->getMyName();

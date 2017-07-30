@@ -7,7 +7,7 @@ void newClient() {
 }
 
 int main(int argc, char ** argv) {
-	ConcurrentDataSharer* sharer = new ConcurrentDataSharer("test");
+	ConcurrentDataSharer* sharer = new ConcurrentDataSharer("test",ConcurrentDataSharer::default_multicastadress,ConcurrentDataSharer::default_listenadress,ConcurrentDataSharer::default_multicastport);
 	std::cout<<"my name is"<<sharer->getMyName()<<" and I just share two variables"<<std::endl;
 	sharer->set<int>("data",43);
 	sharer->set<int>("data1",42);
