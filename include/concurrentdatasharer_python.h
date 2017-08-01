@@ -228,7 +228,7 @@ public:
 
 	}
 	std::function<void(std::string)> createPythonSubscription(const std::string func) {
-		return [&,func](std::string data) {main_namespace[func](((pickler->loads)(object(data).attr("encode")())));};
+		return [&,func](std::string data) {main_namespace[func](pickler->loads(object(data)));};
 	}
 	;
 	void printLogs() {
@@ -247,7 +247,29 @@ private:
 	PyThreadState* threadState;
 };
 
-BOOST_PYTHON_MODULE(ConcurrentDataSharer)
+BOOST_PYTHON_MODULE(ConcurrentDataSharerPython3)
+{
+	Py_Initialize();
+	PyEval_InitThreads();
+	class_<ConcurrentDataSharerPython, boost::noncopyable>(
+			"ConcurrentDataSharer",init<std::string>()).def(
+							init<std::string,std::string>()).def("setValue",
+			&ConcurrentDataSharerPython::setValuePython,
+			return_value_policy<reference_existing_object>()).def("getClients",
+			&ConcurrentDataSharerPython::getClientsPython).def(
+			"getClientVariablesList",
+			&ConcurrentDataSharerPython::getClientVariablesListPython).def(
+			"getClientVariable",
+			&ConcurrentDataSharerPython::getClientVariableIntPython).def(
+			"getValue", &ConcurrentDataSharerPython::getValuePython).def(
+			"getLogs", &ConcurrentDataSharerPython::getLogsPython).def(
+			"subscribe1", &ConcurrentDataSharerPython::subscribePython).def(
+			"printLogs", &ConcurrentDataSharerPython::printLogs).def("getName",
+			&ConcurrentDataSharerPython::getMyName).def("subscribe",&ConcurrentDataSharerPython::subscribePython);
+
+}
+
+BOOST_PYTHON_MODULE(ConcurrentDataSharerPython2)
 {
 	Py_Initialize();
 	PyEval_InitThreads();

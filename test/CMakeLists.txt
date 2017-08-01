@@ -3,5 +3,4 @@ project (ConcurrentDataSharer)
 
 add_subdirectory(clienttest)
 add_subdirectory(clienttest1)
-add_subdirectory(pythontest)
 add_subdirectory(subtest)

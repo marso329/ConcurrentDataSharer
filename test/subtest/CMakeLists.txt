@@ -1,10 +1,10 @@
 cmake_minimum_required (VERSION 3.5.1)
 project (subtest)
 set ( PROJECT_LINK_LIBS ConcurrentDataSharer.so )
-link_directories( ../../lib )
-include_directories(../../include)
+link_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../../lib )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../bin)
 set (CMAKE_CXX_FLAGS "-std=c++11")
 add_executable(subtest main.cpp)
 target_link_libraries(subtest ${PROJECT_LINK_LIBS} -lboost_serialization  -lboost_thread -lboost_system  )

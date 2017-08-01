@@ -3,6 +3,7 @@
 const std::string ConcurrentDataSharer::default_multicastadress="239.255.0.1";
 const std::string ConcurrentDataSharer::default_listenadress="0.0.0.0";
 const short ConcurrentDataSharer::default_multicastport=30001;
+
 ConcurrentDataSharer::ConcurrentDataSharer(std::string const& groupName,
 		std::string const& multicastadress, std::string const & listenadress,
 		const short multicastport) :
